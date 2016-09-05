@@ -61,26 +61,42 @@ public class MessenteOptions {
     /**
      * Gets the httpProtocol that is used for making API call.
      *
-     * @return
+     * @return HTTP or HTTPS protocol. HTTPS is the default protocol if protocol
+     * is not defined.
      */
     public HttpProtocol getProtocol() {
         return httpProtocol != null ? httpProtocol : HttpProtocol.HTTPS;
     }
 
+    /**
+     * Sets the protocol used for API calls.
+     *
+     * @param protocol HTTP protocol (HTTP or HTTPS).
+     */
     public void setProtocol(HttpProtocol protocol) {
         this.httpProtocol = protocol;
     }
 
+    /**
+     * Gets the HTTP method used for API calls.
+     *
+     * @return HTTP GET or POST method. POST is the default method.
+     */
     public String getHttpMethod() {
         return httpMethod != null ? httpMethod.toString() : HttpMethod.POST.toString();
     }
 
+    /**
+     * Sets the HTTP (POST or GET) method used for API calls.
+     *
+     * @param httpMethod HTTP POST/GET method.
+     */
     public void setHttpMethod(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
     }
 
     /**
-     * Enumeration of Messente character replacement options.
+     * Enumeration of Messente character replacement.
      */
     public enum Autoconvert {
 
