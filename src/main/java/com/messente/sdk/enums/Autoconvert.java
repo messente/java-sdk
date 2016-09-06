@@ -16,29 +16,24 @@
 package com.messente.sdk.enums;
 
 /**
- * Enumeration of Messente API methods.
+ * Enumeration of Messente character replacement.
  *
- * @see
- * <a href="http://messente.com/documentation/setup-and-activation">Messente API
- * doc.</a>
  * @author Lennar Kallas
  */
-public enum ApiMethod {
+public enum Autoconvert {
 
-    SEND_SMS("/send_sms/"),
-    GET_DLR_RESPONSE("/get_dlr_response/"),
-    PRICES("/prices/"),
-    GET_BALANCE("/get_balance/");
+    ON("on"),
+    OFF("off"),
+    FULL("full");
 
-    private final String apiMethod;
+    private final String convert;
 
-    private ApiMethod(final String apiMethod) {
-        this.apiMethod = apiMethod;
+    private Autoconvert(final String convert) {
+        this.convert = convert;
     }
 
     @Override
     public String toString() {
-        return apiMethod;
+        return convert;
     }
-
 }

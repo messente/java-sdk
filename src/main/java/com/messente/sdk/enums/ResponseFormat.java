@@ -16,29 +16,23 @@
 package com.messente.sdk.enums;
 
 /**
- * Enumeration of Messente API methods.
+ * Enumeration of response types for Messente pricing API.
  *
- * @see
- * <a href="http://messente.com/documentation/setup-and-activation">Messente API
- * doc.</a>
  * @author Lennar Kallas
  */
-public enum ApiMethod {
+public enum ResponseFormat {
 
-    SEND_SMS("/send_sms/"),
-    GET_DLR_RESPONSE("/get_dlr_response/"),
-    PRICES("/prices/"),
-    GET_BALANCE("/get_balance/");
+    JSON("json"),
+    XML("xml");
 
-    private final String apiMethod;
+    private final String format;
 
-    private ApiMethod(final String apiMethod) {
-        this.apiMethod = apiMethod;
+    private ResponseFormat(final String format) {
+        this.format = format;
     }
 
     @Override
     public String toString() {
-        return apiMethod;
+        return format;
     }
-
 }
