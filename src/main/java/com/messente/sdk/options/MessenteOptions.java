@@ -1,11 +1,11 @@
-/**
- * Copyright 2016 Lennar Kallas, Messente Communications Ltd.
+/*
+ * Copyright 2016 Messente Communications Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.messente.sdk.options;
 
+import com.messente.sdk.enums.Autoconvert;
 import com.messente.sdk.enums.HttpProtocol;
 import com.messente.sdk.enums.HttpMethod;
 import com.messente.sdk.exception.MessenteException;
@@ -59,7 +60,7 @@ public class MessenteOptions {
     }
 
     /**
-     * Gets the httpProtocol that is used for making API call.
+     * Gets the HttpProtocol object that is used for making API call.
      *
      * @return HTTP or HTTPS protocol. HTTPS is the default protocol if protocol
      * is not defined.
@@ -69,7 +70,7 @@ public class MessenteOptions {
     }
 
     /**
-     * Sets the protocol used for API calls.
+     * Sets the HTTP protocol used for API calls.
      *
      * @param protocol HTTP protocol (HTTP or HTTPS).
      */
@@ -96,26 +97,10 @@ public class MessenteOptions {
     }
 
     /**
-     * Enumeration of Messente character replacement.
+     * Gets the time when the SMS should be sent.
+     *
+     * @return scheduled time for SMS sending as string, null if not set.
      */
-    public enum Autoconvert {
-
-        ON("on"),
-        OFF("off"),
-        FULL("full");
-
-        private final String convert;
-
-        private Autoconvert(final String convert) {
-            this.convert = convert;
-        }
-
-        @Override
-        public String toString() {
-            return convert;
-        }
-    }
-
     public String getTimeToSend() {
         return timeToSend;
         //== null ? String.valueOf(Instant.now().getEpochSecond()) : timeToSend;
@@ -131,14 +116,28 @@ public class MessenteOptions {
         this.timeToSend = timeToSend;
     }
 
+    /**
+     * Gets the DLR URL if set.
+     *
+     * @return DLR URL as string, null if not set.
+     */
     public String getDlrUrl() {
         return dlrUrl;
     }
 
+    /**
+     *
+     * @param dlrUrl DLR URL to set.
+     */
     public void setDlrUrl(String dlrUrl) {
         this.dlrUrl = dlrUrl;
     }
 
+    /**
+     * Gets the charset of the message/sender ID if set.
+     *
+     * @return charset that is used in SMS text/sender ID, null if not set.
+     */
     public String getCharset() {
         return charset == null ? "UTF-8" : charset;
     }
@@ -153,6 +152,12 @@ public class MessenteOptions {
         this.charset = charset;
     }
 
+    /**
+     * Gets the validity of the SMS message.
+     *
+     * @return validity (in minutes) of the SMS message as string, null if not
+     * set.
+     */
     public String getValidity() {
         return validity;
     }
@@ -202,6 +207,9 @@ public class MessenteOptions {
         this.udh = udh;
     }
 
+    /**
+     * Inner static class for simple building of Messente options.
+     */
     public static class Builder {
 
         private String timeToSend;
