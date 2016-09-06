@@ -2,24 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.messente</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0</version>
+    <artifactId>messente-sdk</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-    <name>Messente API SDK</name>
-    <description>SDK for using Messente API</description>
-    <url>http://messente.com</url>
+    <name>messente-sdk</name>
+    <description>This SDK contains methods for using SMS Messaging API, Delivery report API, Pricing API and Credits API.</description>
+    <url>https://github.com/messente/messente-sdk</url>
     
     <organization>
         <name>Messente Communications Ltd.</name>
         <url>http://messente.com</url>
     </organization>
     
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
     <scm>
-        <connection>scm:git@github.com:messente/java-sdk.git</connection>
-        <developerConnection>scm:git@github.com:messente/java-sdk.git</developerConnection>
-        <url>https://github.com/messente/java-sdk.git</url>
+        <connection>scm:git:git://github.com/messente/messente-sdk.git</connection>
+        <developerConnection>scm:git:git@github.com:messente/messente-sdk.git</developerConnection>
+        <url>https://github.com/messente/messente-sdk/tree/master</url>
     </scm> 
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     
     <developers>
         <developer>
@@ -76,7 +95,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -89,7 +108,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
+                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -102,7 +121,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
