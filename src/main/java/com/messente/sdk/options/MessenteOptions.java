@@ -172,37 +172,63 @@ public class MessenteOptions {
         this.validity = validity;
     }
 
+    /**
+     * Sets the value for how long the message is re-tried when the phone is
+     * switched off (in minutes).
+     *
+     * @param validity SMS validity in minutes.
+     */
     public void setValidity(int validity) {
         this.validity = String.valueOf(validity);
     }
 
+    /**
+     * Gets the character autoreplace opton used for SMS text.
+     *
+     * @return Autoconvert option, null if not set.
+     */
     public String getAutoconvert() {
         return autoconvert; // != null ? autoconvert : Autoconvert.ON.toString();
     }
 
     /**
-     * Sets character autoreplace option.
+     * Sets SMS text character autoreplace option.
      *
-     * @param convert
+     * @see
+     * <a href="http://messente.com/documentation/auto-replace">http://messente.com/documentation/auto-replace</a>
+     *
+     * @param convert character autoreplace option.
      */
     public void setAutoconvert(Autoconvert convert) {
-
         this.autoconvert = convert.toString();
     }
 
     /**
-     * Sets character autoreplace option.
+     * Sets SMS text character autoreplace option.
      *
-     * @param convert
+     * @see
+     * <a href="http://messente.com/documentation/auto-replace">http://messente.com/documentation/auto-replace</a>
+     * @param convert character autoreplace option. Available choices are ON,
+     * FULL, OFF.
      */
     public void setAutoconvert(String convert) {
         this.autoconvert = convert;
     }
 
+    /**
+     * Gets the UDH of the SMS message.
+     *
+     * @return UDH as string, null if not set.
+     */
     public String getUdh() {
         return udh;
     }
 
+    /**
+     * Sets the UDH for SMS message.
+     *
+     * @param udh UDH to set.
+     */
     public void setUdh(String udh) {
         this.udh = udh;
     }
