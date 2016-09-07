@@ -1,11 +1,11 @@
-/**
- * Copyright 2016 Lennar Kallas, Messente Communications Ltd.
+/*
+ * Copyright 2016 Messente Communications Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ public class MessenteResponse {
     public static final String BLACKLISTED_NR = "Number is in blacklist.";
 
     public static final String INVALID_SENDER = "Sender parameter \"from\" "
-            + "is invalid. You have not activated this sender name on Messente.com";
+            + "is invalid. You have not activated this sender name on messente.com";
 
     public static final String NO_DLR = "No Delivery report yet, "
             + "try again later.";
@@ -73,7 +73,7 @@ public class MessenteResponse {
      *
      * @return Server response as string.
      */
-    public String getResponse() {
+    public String getRawResponse() {
         return RESPONSE;
     }
 
@@ -162,7 +162,7 @@ public class MessenteResponse {
      * @return string with DLR status explanation.
      */
     protected String getDlrMessage() {
-        switch (getResponse()) {
+        switch (getRawResponse()) {
             case "OK SENT":
                 return DLR_SENT;
             case "OK FAILED":
@@ -180,7 +180,7 @@ public class MessenteResponse {
      * @return string with failure explanation.
      */
     protected String getFailureMessage() {
-        switch (getResponse()) {
+        switch (getRawResponse()) {
             case "ERROR 101":
                 return MessenteResponse.ACCESS_RESTRICTED;
             case "ERROR 102":
