@@ -181,7 +181,8 @@ public class Messente {
     }
 
     /**
-     * Validates properties file keys.
+     * Validates properties file by comparing list of mandatory keys and keys in
+     * the properties file.
      *
      * @param a Collection to check.
      * @param b Collection with required keys.
@@ -275,7 +276,8 @@ public class Messente {
     }
 
     /**
-     * Sets the URL of Messente's API server.
+     * Sets the URL of Messente's API server. URL must not contain protocol, or
+     * forward slashes. The correct format is for example api2.messente.com
      *
      * @param server Main Messente API server (without protocol).
      */
@@ -293,7 +295,9 @@ public class Messente {
     }
 
     /**
-     * Sets the URL of Messente's API backup server.
+     * Sets the URL of Messente's API backup server. URL must not contain
+     * protocol, or forward slashes. The correct format is for example
+     * api3.messente.com
      *
      * @param backupServer Main Messente API backup server without protocol
      */
@@ -354,7 +358,7 @@ public class Messente {
      * @param number phone number.
      * @return phone number in correct format for using Messente API call.
      */
-    private String prepareNumber(String number) {
+    private String preparePhoneNumber(String number) {
         number = number.replaceAll("\\D+", "");
         return "+" + number;
     }
@@ -405,7 +409,7 @@ public class Messente {
         }
 
         appendRequestParameter(postData, "text", text, options.getCharset()); // Add SMS 
-        appendRequestParameter(postData, "to", prepareNumber(recipient), "UTF-8"); // Add recipient
+        appendRequestParameter(postData, "to", preparePhoneNumber(recipient), "UTF-8"); // Add recipient
 
         return sendRequest(options.getProtocol(), options.getHttpMethod(),
                 ApiMethod.SEND_SMS, postData.toString());
@@ -553,7 +557,8 @@ public class Messente {
      * @param builder StringBuilder with existing parameters.
      * @param params Reguest parameters as map.
      * @param urlencode sets whether parameter should be encoded in UTF-8.
-     * @throws MessenteException
+     * @throws MessenteException if Stringbuilder parameter is null or encoding
+     * to UTF-8 fails.
      */
     private void appendRequestParameters(
             StringBuilder builder,
@@ -587,7 +592,7 @@ public class Messente {
     }
 
     /**
-     * Gets the delivery status
+     * Gets the delivery status of SMS.
      *
      * @param msgid Unique message ID.
      * @return Delivery status as MessenteDeliveryStatus object.
@@ -645,7 +650,7 @@ public class Messente {
     }
 
     /**
-     * Gets the pricelist for given country & response format.
+     * Gets the pricelist for given country in specified response format.
      *
      * @param country Country which pricelist is requested.
      * @param format Format of the response. JSON or XML.
@@ -659,9 +664,10 @@ public class Messente {
     }
 
     /**
-     * Gets the pricelist for given country & response format.
+     * Gets the pricelist for given country in specified response format.
      *
      * @param country Country which pricelist is requested.
+     * @param options Customized options to use for API call.
      * @return MessenteResponse object with pricelist.
      * @throws MessenteException if country is not specified.
      */
@@ -676,7 +682,7 @@ public class Messente {
      *
      * @param country Country which pricelist is requested.
      * @param format Format of the response. JSON or XML.
-     * @param options Options to use for API call.
+     * @param options Customized options to use for API call.
      * @return MessenteResponse object with pricelist.
      * @throws MessenteException if country is not specified.
      */
@@ -704,7 +710,10 @@ public class Messente {
     }
 
     /**
-     * Gets account balance.
+     * Gets account balance. Note that if you send SMS and ask for balance
+     * milliseconds after sending, the balance might not be correct. Account
+     * balance updating will take a few seconds depending on queues on
+     * Messente's side.
      *
      * @return MessenteResponse object with account balance.
      * @throws MessenteException if HTTP request fails.
@@ -714,7 +723,10 @@ public class Messente {
     }
 
     /**
-     * Gets account balance.
+     * Gets account balance. Note that if you send SMS and ask for balance
+     * milliseconds after sending, the balance might not be correct. Account
+     * balance updating will take a few seconds depending on queues on
+     * Messente's side.
      *
      * @param options Makes API call with specific options.
      * @return MessenteResponse object with account balance.
@@ -732,16 +744,48 @@ public class Messente {
                 ApiMethod.GET_BALANCE, credentials);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's messaging API.
+     *
+     * @param from Sender ID. Must be registered and validated under your
+     * messente.com account.
+     * @param to Recipient's phone number.
+     * @param text SMS text.
+     * @return Correctly formatted URL for HTTP request to Messente's messaging
+     * API.
+     * @throws MessenteException If recipient or SMS text is not specified.
+     */
     public URL getMessagingURL(String from, String to, String text) throws MessenteException {
 
         return getMessagingURL(from, to, text, null);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's messaging API. Note
+     * that this method will use your default sender ID.
+     *
+     * @param to Recipient's phone number.
+     * @param text SMS text.
+     * @return Correctly formatted URL for HTTP request to Messente's messaging
+     * API.
+     * @throws MessenteException If recipient or SMS text is not specified.
+     */
     public URL getMessagingURL(String to, String text) throws MessenteException {
 
         return getMessagingURL(null, to, text, null);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's messaging API.
+     *
+     * @param from Sender ID. Must be registered and validated under your
+     * messente.com account.
+     * @param to Recipient's phone number.
+     * @param text SMS text.
+     * @return Correctly formatted URL for HTTP request to Messente's messaging
+     * API.
+     * @throws MessenteException If recipient or SMS text is not specified.
+     */
     public URL getMessagingURL(String from, String to, String text, MessenteOptions options) throws MessenteException {
 
         if (to == null || to.trim().isEmpty()) {
@@ -762,7 +806,7 @@ public class Messente {
             appendRequestParameter(postData, "from", from, options.getCharset());
         }
 
-        appendRequestParameter(postData, "to", prepareNumber(to), "UTF-8");
+        appendRequestParameter(postData, "to", preparePhoneNumber(to), "UTF-8");
         appendRequestParameter(postData, "text", text, options.getCharset());
 
         appendRequestParameters(postData, options.getOptions(), true);
@@ -775,11 +819,30 @@ public class Messente {
 
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
     public URL getPricingURL(ResponseFormat format, Country country) throws MessenteException {
 
         return getPricingURL(format, country, null);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @param options Makes API call with specific options.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
     public URL getPricingURL(ResponseFormat format, Country country,
             MessenteOptions options) throws MessenteException {
 
@@ -803,17 +866,33 @@ public class Messente {
     }
 
     /**
-     * Gets Messente DLR API URL.
+     * Gets the correct URL for HTTP request to Messente's synchronous delivery
+     * report API.
      *
-     * @param msgid unique message ID.
-     * @return
-     * @throws MessenteException
+     * @see
+     * <a href="http://messente.com/documentation/delivery-report">http://messente.com/documentation/delivery-report</a>
+     * @param msgid unique message ID which delivery report you wish to have.
+     * @return Correctly formatted URL for HTTP request to Messente's delivery
+     * report API.
+     * @throws MessenteException Message ID not specified.
      */
     public URL getDlrURL(String msgid) throws MessenteException {
 
         return getDlrURL(msgid, null);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's synchronous delivery
+     * report API.
+     *
+     * @param options Makes API call with specific options.
+     * @see
+     * <a href="http://messente.com/documentation/delivery-report">http://messente.com/documentation/delivery-report</a>
+     * @param msgid unique message ID which delivery report you wish to have.
+     * @return Correctly formatted URL for HTTP request to Messente's delivery
+     * report API.
+     * @throws MessenteException Message ID not specified.
+     */
     public URL getDlrURL(String msgid, MessenteOptions options) throws MessenteException {
 
         if (msgid == null || msgid.trim().isEmpty()) {
@@ -828,10 +907,29 @@ public class Messente {
         return getURL(options.getProtocol(), getServer(), ApiMethod.GET_DLR_RESPONSE, postData);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's credits API.
+     *
+     * @see
+     * <a href="http://messente.com/documentation/credits-api">http://messente.com/documentation/credits-api</a>
+     * @return Correctly formatted URL for HTTP request to Messente's credits
+     * API.
+     * @throws MessenteException If building URL fails.
+     */
     public URL getCreditsURL() throws MessenteException {
         return getCreditsURL(null);
     }
 
+    /**
+     * Gets the correct URL for HTTP request to Messente's credits API.
+     *
+     * @param options Makes API call with specific options.
+     * @see
+     * <a href="http://messente.com/documentation/credits-api">http://messente.com/documentation/credits-api</a>
+     * @return Correctly formatted URL for HTTP request to Messente's credits
+     * API.
+     * @throws MessenteException If building URL fails.
+     */
     public URL getCreditsURL(MessenteOptions options) throws MessenteException {
 
         if (options == null) {
@@ -864,7 +962,7 @@ public class Messente {
     }
 
     /**
-     * Gets the current external IP of the client.
+     * Convenience method for getting the current external IP of the client.
      *
      * @return current external IP address.
      * @throws MessenteException when the IP retrieval failed.
