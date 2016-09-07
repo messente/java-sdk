@@ -47,94 +47,6 @@ public class MessenteTest {
     }
 
     /**
-     * Test of getUsername method, of class Messente.
-     */
-    @Test
-    public void testGetUsername() {
-
-    }
-
-    /**
-     * Test of setUsername method, of class Messente.
-     */
-    @Test
-    public void testSetUsername() {
-
-    }
-
-    /**
-     * Test of getPassword method, of class Messente.
-     */
-    @Test
-    public void testGetPassword() {
-
-    }
-
-    /**
-     * Test of setPassword method, of class Messente.
-     */
-    @Test
-    public void testSetPassword() {
-
-    }
-
-    /**
-     * Test of getServer method, of class Messente.
-     */
-    @Test
-    public void testGetServer() {
-
-    }
-
-    /**
-     * Test of setServer method, of class Messente.
-     */
-    @Test
-    public void testSetServer() {
-
-    }
-
-    /**
-     * Test of getBackupServer method, of class Messente.
-     */
-    @Test
-    public void testGetBackupServer() {
-
-    }
-
-    /**
-     * Test of setBackupServer method, of class Messente.
-     */
-    @Test
-    public void testSetBackupServer() {
-
-    }
-
-    /**
-     * Test of sendSMS method, of class Messente.
-     */
-    @Test
-    public void testSendSMS_4args() throws Exception {
-
-    }
-
-    /**
-     * Test of sendSMS method, of class Messente.
-     */
-    @Test
-    public void testSendSMS_3args() throws Exception {
-
-    }
-
-    /**
-     * Test of sendSMS method, of class Messente.
-     */
-    @Test
-    public void testSendSMS_String_String() throws Exception {
-
-    }
-
-    /**
      * Test of getDeliveryStatus method, of class Messente.
      */
     @Test
@@ -179,22 +91,6 @@ public class MessenteTest {
      */
     @Test
     public void testGetPriceList_3args() throws Exception {
-
-    }
-
-    /**
-     * Test of getBalance method, of class Messente.
-     */
-    @Test
-    public void testGetBalance_0args() throws Exception {
-
-    }
-
-    /**
-     * Test of getBalance method, of class Messente.
-     */
-    @Test
-    public void testGetBalance_MessenteOptions() throws Exception {
 
     }
 
@@ -275,14 +171,6 @@ public class MessenteTest {
      */
     @Test
     public void testGetMyIP() throws Exception {
-
-    }
-
-    /**
-     * Test of toString method, of class Messente.
-     */
-    @Test
-    public void testToString() {
 
     }
 
