@@ -130,7 +130,7 @@ public class MessenteResponse {
     /**
      * Gets the substring after defined response prefix.
      *
-     * @param prefix
+     * @param prefix The response prefix from server response. For example "OK".
      * @return null if input prefix is not defined, otherwise substring after
      * prefix.
      */

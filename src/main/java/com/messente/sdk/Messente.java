@@ -46,8 +46,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * This class is the heart & brain of this SDK. Provides flexible ways to use
- * all Messente API methods (messaging, pricing, credits and DLR).
+ * This class is the heart &amp; brain of this SDK. Provides flexible ways to
+ * use all Messente API methods (messaging, pricing, credits and DLR).
  *
  * @author Lennar Kallas
  */
@@ -678,7 +678,7 @@ public class Messente {
     }
 
     /**
-     * Gets the pricelist for given country & response format.
+     * Gets the pricelist for given country &amp; response format.
      *
      * @param country Country which pricelist is requested.
      * @param format Format of the response. JSON or XML.
@@ -782,6 +782,7 @@ public class Messente {
      * messente.com account.
      * @param to Recipient's phone number.
      * @param text SMS text.
+     * @param options Makes API call with specific options.
      * @return Correctly formatted URL for HTTP request to Messente's messaging
      * API.
      * @throws MessenteException If recipient or SMS text is not specified.
