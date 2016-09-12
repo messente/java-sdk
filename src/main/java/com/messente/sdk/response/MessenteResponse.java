@@ -63,6 +63,8 @@ public class MessenteResponse {
     public static final String DLR_DELIVERED = "SMS was successfully delivered "
             + "to recipient";
 
+    public static final String INVALID_TEMPLATE = "PIN code field is missing in the template value";
+
     public MessenteResponse(String response, int httpCode) {
         this.RESPONSE = response;
         this.HTTP_RESPONSE_CODE = httpCode;
@@ -195,6 +197,8 @@ public class MessenteResponse {
                 return MessenteResponse.UNKNOWN_MESSAGE_ID;
             case "ERROR 108":
                 return MessenteResponse.BLACKLISTED_NR;
+            case "ERROR 109":
+                return MessenteResponse.INVALID_TEMPLATE;
             case "ERROR 111":
                 return MessenteResponse.INVALID_SENDER;
             case "FAILED 102":
