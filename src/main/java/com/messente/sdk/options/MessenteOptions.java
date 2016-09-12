@@ -45,7 +45,6 @@ public class MessenteOptions {
     // Verification
     private String ip;
     private String browser;
-    private String cookie;
     private String verifyMaxTries;
     private String verifyRetryDelay;
     private String verifyValidity;
@@ -69,7 +68,6 @@ public class MessenteOptions {
         this.httpMethod = builder.httpMethod;
         this.ip = builder.ip;
         this.browser = builder.browser;
-        this.cookie = builder.cookie;
         this.verifyMaxTries = builder.verifyMaxTries;
         this.verifyRetryDelay = builder.verifyRetryDelay;
         this.verifyValidity = builder.verifyValidity;
@@ -265,14 +263,6 @@ public class MessenteOptions {
         this.browser = browser;
     }
 
-    public String getCookie() {
-        return cookie;
-    }
-
-    public void setCookie(String cookie) {
-        this.cookie = cookie;
-    }
-
     public String getVerifyMaxTries() {
         return verifyMaxTries;
     }
@@ -305,7 +295,6 @@ public class MessenteOptions {
         // Verification
         private String ip;
         private String browser;
-        private String cookie;
         private String verifyMaxTries;
         private String verifyRetryDelay;
         private String verifyValidity;
@@ -345,19 +334,6 @@ public class MessenteOptions {
          */
         public Builder browser(String browser) {
             this.browser = browser;
-            return this;
-        }
-
-        /**
-         * Optional. Unique cookie assigned to verification session. If a user
-         * tries logging in with the same cookie present, user is automatically
-         * logged in and no PIN code verification is needed.
-         *
-         * @param cookie Unique cookie assigned to verification session.
-         * @return this
-         */
-        public Builder cookie(String cookie) {
-            this.cookie = cookie;
             return this;
         }
 
@@ -453,11 +429,43 @@ public class MessenteOptions {
     }
 
     /**
-     * Gets options that are set (not NULL) as map.
+     * Gets options for verification session as map.
      *
-     * @return map with options.
+     * @return map with verification session options.
      */
-    public Map<String, String> getOptions() {
+    public Map<String, String> getVerifySessionStartOptions() {
+
+        Map<String, String> ops = new HashMap<>();
+
+        if (ip != null && !ip.trim().isEmpty()) {
+            ops.put("ip", ip);
+        }
+
+        if (browser != null && !browser.trim().isEmpty()) {
+            ops.put("browser", browser);
+        }
+
+        if (verifyMaxTries != null && !verifyMaxTries.trim().isEmpty()) {
+            ops.put("max_tries", verifyMaxTries);
+        }
+
+        if (verifyRetryDelay != null && !verifyRetryDelay.trim().isEmpty()) {
+            ops.put("retry_delay", verifyRetryDelay);
+        }
+
+        if (verifyValidity != null && !verifyValidity.trim().isEmpty()) {
+            ops.put("validity", verifyValidity);
+        }
+
+        return ops;
+    }
+
+    /**
+     * Gets SMS sending options that are set as map.
+     *
+     * @return map with SMS sending options.
+     */
+    public Map<String, String> getSmsSendingOptions() {
 
         Map<String, String> options = new HashMap<>();
 
@@ -489,16 +497,17 @@ public class MessenteOptions {
     }
 
     /**
-     * Gets options as request parameters.
+     * Gets options for SMS sending as request parameters.
      *
+     * @param ops Map with options.
      * @return StringBuilder with request parameters.
      * @throws MessenteException when encoding parameter value to UTF-8 fails.
      */
-    public StringBuilder getOptionsAsRequestParams() throws MessenteException {
+    public StringBuilder getOptionsAsRequestParams(Map<String, String> ops) throws MessenteException {
 
         StringBuilder params = new StringBuilder();
 
-        for (Map.Entry<String, String> entry : getOptions().entrySet()) {
+        for (Map.Entry<String, String> entry : ops.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
@@ -532,7 +541,6 @@ public class MessenteOptions {
                 + "Protocol: " + getProtocol() + "\n"
                 + "IP: " + getIp() + "\n"
                 + "Browser: " + getBrowser() + "\n"
-                + "Cookie: " + getCookie() + "\n"
                 + "Verifixation max tries: " + getVerifyMaxTries() + "\n"
                 + "Verification retry delay: " + getVerifyRetryDelay() + "\n"
                 + "Verification validity: " + getVerifyValidity();
