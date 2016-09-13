@@ -305,6 +305,95 @@ public class Messente {
         this.backupServer = backupServer;
     }
 
+    public MessenteResponse verifyPin(String verificationId, String pin) throws MessenteException {
+        return _verifyPin(verificationId, pin, null, null);
+    }
+
+    public URL getPinVerificationURL(String verificationId, String pin) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, null, null);
+    }
+
+    public String getPinVerificationUrlAsString(String verificationId, String pin) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, null, null).toString();
+    }
+
+    public MessenteResponse verifyPin(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return _verifyPin(verificationId, pin, options, null);
+    }
+
+    public URL getPinVerificationURL(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, null);
+    }
+
+    public String getPinVerificationUrlAsString(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, null).toString();
+    }
+
+    public MessenteResponse verifyPin(String verificationId, String pin, String cookie) throws MessenteException {
+        return _verifyPin(verificationId, pin, null, cookie);
+    }
+
+    public URL getPinVerificationURL(String verificationId, String pin, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, null, cookie);
+    }
+
+    public String getPinVerificationUrlAsString(String verificationId, String pin, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, null, cookie).toString();
+    }
+
+    private MessenteResponse _verifyPin(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+
+        URL url = getPinVerificationURL(verificationId, pin, options, cookie);
+
+        return sendRequest(url, options.getHttpMethod());
+    }
+
+    public String getPinVerificationUrlAsString(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, cookie).toString();
+    }
+
+    public URL getPinVerificationURL(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+        // Check verification ID
+        if (verificationId == null || verificationId.trim().isEmpty()) {
+            throw new MessenteException("Missing Verification ID!");
+        }
+
+        // Check PIN
+        if (pin == null || pin.trim().isEmpty()) {
+            throw new MessenteException("PIN missing!");
+        }
+
+        // Check cookie (can't be empty string)
+        if (cookie != null && cookie.trim().isEmpty()) {
+            throw new MessenteException("Invalid cookie");
+        }
+
+        // Set default options
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        StringBuilder postData = new StringBuilder();
+
+        // Get pre-defined options for verification session
+        Map<String, String> verifyOps = options.getPinVerifyOptions();
+        // Check pre defined options map
+        if (verifyOps != null && !verifyOps.isEmpty()) {
+            appendRequestParameters(postData, verifyOps, true);
+        }
+
+        // Check and add cookie
+        if (cookie != null && !cookie.trim().isEmpty()) {
+            appendRequestParameter(postData, "cookie", cookie, "UTF-8"); // Add cookie
+
+        }
+
+        appendRequestParameter(postData, "pin", pin, "UTF-8"); // Add pin
+        appendRequestParameter(postData, "verification_id", verificationId, "UTF-8"); // Add verification ID
+
+        return buildURL(options.getProtocol(), ApiMethod.VERIFY_PIN, postData.toString());
+    }
+
     public MessenteResponse startVerificationSession(String to) throws MessenteException {
         return _startVerification(null, to, null, new MessenteOptions(), null);
     }
@@ -368,56 +457,9 @@ public class Messente {
             MessenteOptions options,
             String cookie) throws MessenteException {
 
-        // Check SMS template for required placeholder
-        if ((template != null && !template.trim().isEmpty()) && !template.contains("<PIN>")) {
-            throw new MessenteException(
-                    "Verification message template "
-                    + "is missing '<PIN>' placeholder!");
-        }
+        URL url = getStartVerificationURL(from, to, template, options, cookie);
 
-        // Check phone number
-        if (!to.replaceAll("\\D+", "").matches("\\d+")) {
-            throw new MessenteException("Invalid recipient's phone number!");
-        }
-
-        // Check cookie
-        if (cookie != null && cookie.trim().isEmpty()) {
-            throw new MessenteException("Invalid cookie");
-        }
-
-        StringBuilder postData = new StringBuilder();
-
-        // Get pre-defined options for verification session
-        Map<String, String> verifyOps = options.getVerifySessionStartOptions();
-
-        // Check pre defined options map
-        if (verifyOps != null && !verifyOps.isEmpty()) {
-            appendRequestParameters(postData, verifyOps, true);
-        }
-
-        // Set 'from' parameter
-        if (from != null && !from.trim().isEmpty()) {
-            appendRequestParameter(
-                    postData,
-                    "from",
-                    from,
-                    options.getCharset());
-        }
-
-        // Check and add template
-        if (template != null && !template.trim().isEmpty()) {
-            appendRequestParameter(postData, "template", template, "UTF-8");
-        }
-
-        // Check and add cookie
-        if (cookie != null && !cookie.trim().isEmpty()) {
-            appendRequestParameter(postData, "cookie", cookie, "UTF-8"); // Add recipient
-        }
-
-        appendRequestParameter(postData, "to", preparePhoneNumber(to), "UTF-8"); // Add recipient
-
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.VERIFY_START, postData.toString());
+        return sendRequest(url, options.getHttpMethod());
     }
 
     public URL getStartVerificationURL(
@@ -475,11 +517,37 @@ public class Messente {
 
         appendRequestParameter(postData, "to", preparePhoneNumber(to), "UTF-8"); // Add recipient
 
-        return getURL(
-                options.getProtocol(),
-                getServer(),
-                ApiMethod.VERIFY_START,
-                postData.toString());
+        return buildURL(options.getProtocol(), ApiMethod.VERIFY_START, postData.toString());
+    }
+
+    /**
+     * Builds URL with given parameters.
+     *
+     * @param protocol Protocol used in URL. HTTP/HTTPS.
+     * @param apiMethod Messente's API that is used for URL building.
+     * @param params
+     * @return
+     * @throws MessenteException
+     */
+    private URL buildURL(HttpProtocol protocol, ApiMethod apiMethod, String params) throws MessenteException {
+
+        URL url = null;
+
+        try {
+            // Build URL and add request params if there are any
+            String urlStr
+                    = new URL(protocol.toString(), getServer(), apiMethod.toString())
+                    .toString()
+                    + "?" + prepareCredentialsAsRequestParams(getUsername(), getPassword())
+                    + (params != null ? "&" + params : "");
+
+            url = new URL(urlStr);
+
+        } catch (MalformedURLException ex) {
+            throw new MessenteException("Building URL failed "
+                    + ex.getMessage() != null ? ex.getMessage() : "");
+        }
+        return url;
     }
 
     /**
@@ -574,42 +642,24 @@ public class Messente {
             String text,
             MessenteOptions options) throws MessenteException {
 
-        StringBuilder postData = new StringBuilder();
+        URL url = getMessagingURL(from, recipient, text, options);
 
-        appendRequestParameters(postData, options.getSmsSendingOptions(), true);
-        if (from != null && !from.trim().isEmpty()) {
-            appendRequestParameter(
-                    postData,
-                    "from",
-                    from,
-                    options.getCharset());
-        }
-
-        appendRequestParameter(postData, "text", text, options.getCharset()); // Add SMS 
-        appendRequestParameter(postData, "to", preparePhoneNumber(recipient), "UTF-8"); // Add recipient
-
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.SEND_SMS, postData.toString());
+        return sendRequest(url, options.getHttpMethod());
     }
 
     /**
      * Dispatch method for making HTTP requests. Retry call to backup server if
      * main server failed.
      *
-     * @param protocol HTTP protocol being used.
-     * @param httpMethod HTTP GET or POST.
-     * @param apiMethod Messente API method.
-     * @param postData Data to post.
+     * @param url URL of the request.
+     * @param httpMethod HTTP POST/GET method used for request.
      * @return response from the API server as MessenteResponse object.
      * @throws MessenteException if HTTP request fails.
      */
-    private MessenteResponse sendRequest(HttpProtocol protocol, String httpMethod,
-            ApiMethod apiMethod, String postData) throws MessenteException {
+    private MessenteResponse sendRequest(URL url, String httpMethod) throws MessenteException {
 
         boolean retry = false;
         MessenteResponse response = null;
-
-        URL url = getURL(protocol, getServer(), apiMethod, postData);
 
         response = makeHttpRequest(url, httpMethod);
 
@@ -619,14 +669,19 @@ public class Messente {
 
         // Retry with backup server
         if (retry && getBackupServer() != null) {
-            url = getURL(protocol, getBackupServer(), apiMethod, postData);
-            response = makeHttpRequest(url, httpMethod);
-        }
 
+            try {
+                url = new URL(url.toString().replaceFirst(server, backupServer));
+                response = makeHttpRequest(url, httpMethod);
+            } catch (MalformedURLException ex) {
+                return response;
+            }
+        }
         return response;
     }
 
     /**
+     * Takes care of making HTTP request to given URL.
      *
      * @param url target URL.
      * @param httpMethod HTTP POST or GET.
@@ -791,23 +846,9 @@ public class Messente {
     public MessenteDeliveryStatus getDeliveryStatus(String msgid, MessenteOptions options)
             throws MessenteException {
 
-        if (msgid == null || msgid.trim().isEmpty()) {
-            throw new MessenteException("Cannot check message delivery status "
-                    + "- message ID not set!");
-        }
+        URL url = getDlrURL(msgid, options);
 
-        StringBuilder postData = new StringBuilder();
-        appendRequestParameter(postData, "sms_unique_id", msgid, "UTF-8");
-
-        // Set default options if none are set
-        if (options == null) {
-            options = new MessenteOptions();
-        }
-
-        MessenteResponse response = sendRequest(
-                options.getProtocol(),
-                options.getHttpMethod(),
-                ApiMethod.GET_DLR_RESPONSE, postData.toString());
+        MessenteResponse response = sendRequest(url, options.getHttpMethod());
 
         return new MessenteDeliveryStatus(
                 response.getRawResponse(),
@@ -866,24 +907,9 @@ public class Messente {
     public MessenteResponse getPriceList(Country country, ResponseFormat format,
             MessenteOptions options) throws MessenteException {
 
-        if (country == null) {
-            throw new MessenteException("Country code not provided(null)!");
-        }
+        URL url = getPricingURL(format, country, options);
 
-        StringBuilder postData = new StringBuilder();
-
-        appendRequestParameter(postData, "country", country.toString(), "UTF-8");
-        if (format != null) {
-            appendRequestParameter(postData, "format", format.toString(), "UTF-8");
-        }
-
-        // Set default options if none are set
-        if (options == null) {
-            options = new MessenteOptions();
-        }
-
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.PRICES, postData.toString());
+        return sendRequest(url, options.getHttpMethod());
     }
 
     /**
@@ -911,14 +937,12 @@ public class Messente {
      */
     public MessenteResponse getBalance(MessenteOptions options) throws MessenteException {
 
-        String credentials = prepareCredentialsAsRequestParams(getUsername(), getPassword());
-
         if (options == null) {
             options = new MessenteOptions();
         }
 
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.GET_BALANCE, credentials);
+        URL url = getCreditsURL(options);
+        return sendRequest(url, options.getHttpMethod());
     }
 
     /**
@@ -1019,12 +1043,7 @@ public class Messente {
 
         appendRequestParameters(postData, options.getSmsSendingOptions(), true);
 
-        return getURL(
-                options.getProtocol(),
-                getServer(),
-                ApiMethod.SEND_SMS,
-                postData.toString());
-
+        return buildURL(options.getProtocol(), ApiMethod.SEND_SMS, postData.toString());
     }
 
     /**
@@ -1101,7 +1120,7 @@ public class Messente {
             appendRequestParameter(postData, "format", format.toString(), "UTF-8");
         }
 
-        return getURL(options.getProtocol(), getServer(), ApiMethod.PRICES, postData.toString());
+        return buildURL(options.getProtocol(), ApiMethod.PRICES, postData.toString());
     }
 
     /**
@@ -1166,7 +1185,7 @@ public class Messente {
     public URL getDlrURL(String msgid, MessenteOptions options) throws MessenteException {
 
         if (msgid == null || msgid.trim().isEmpty()) {
-            throw new MessenteException("Message ID not specified for DLR!");
+            throw new MessenteException("Message ID not specified!");
         }
 
         if (options == null) {
@@ -1174,7 +1193,7 @@ public class Messente {
         }
 
         String postData = "sms_unique_id=" + msgid;
-        return getURL(options.getProtocol(), getServer(), ApiMethod.GET_DLR_RESPONSE, postData);
+        return buildURL(options.getProtocol(), ApiMethod.GET_DLR_RESPONSE, postData);
     }
 
     /**
@@ -1190,7 +1209,6 @@ public class Messente {
      * @throws MessenteException Message ID not specified.
      */
     public String getDlrUrlAsString(String msgid, MessenteOptions options) throws MessenteException {
-
         return getDlrURL(msgid, options).toString();
     }
 
@@ -1236,7 +1254,7 @@ public class Messente {
             options = new MessenteOptions();
         }
 
-        return getURL(options.getProtocol(), getServer(), ApiMethod.GET_BALANCE, null);
+        return buildURL(options.getProtocol(), ApiMethod.GET_BALANCE, null);
     }
 
     /**
