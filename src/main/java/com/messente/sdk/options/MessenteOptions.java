@@ -433,6 +433,26 @@ public class MessenteOptions {
      *
      * @return map with verification session options.
      */
+    public Map<String, String> getPinVerifyOptions() {
+
+        Map<String, String> ops = new HashMap<>();
+
+        if (ip != null && !ip.trim().isEmpty()) {
+            ops.put("ip", ip);
+        }
+
+        if (browser != null && !browser.trim().isEmpty()) {
+            ops.put("browser", browser);
+        }
+
+        return ops;
+    }
+
+    /**
+     * Gets options for verification session as map.
+     *
+     * @return map with verification session options.
+     */
     public Map<String, String> getVerifySessionStartOptions() {
 
         Map<String, String> ops = new HashMap<>();
