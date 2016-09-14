@@ -17,7 +17,11 @@ package com.messente.examples.simple;
 
 import com.messente.sdk.Messente;
 import com.messente.sdk.enums.Country;
+import com.messente.sdk.enums.HttpMethod;
+import com.messente.sdk.enums.HttpProtocol;
 import com.messente.sdk.enums.ResponseFormat;
+import com.messente.sdk.exception.MessenteException;
+import com.messente.sdk.options.MessenteOptions;
 import com.messente.sdk.response.MessenteResponse;
 
 /**
@@ -40,12 +44,14 @@ public class GetPricesSimpleExample {
         MessenteResponse response = null;
 
         try {
-
-            // Get price list for Hungary in default response format which is JSON.
+            // #### EXAMPLE 1 ####
+            // Get price list for Hungary in default response format which is JSON, using default request options.
             response = messente.getPriceList(Country.HUNGARY);
 
             // Checking the response status
             if (response.isSuccess()) {
+
+                System.out.println("#### EXAMPLE 1 ####");
 
                 System.out.println("\nDefault(JSON) response format:\n");
 
@@ -61,11 +67,14 @@ public class GetPricesSimpleExample {
                 throw new RuntimeException(response.getResponseMessage());
             }
 
-            // Get price list for Hungary in XML response format.
+            // #### EXAMPLE 2 ####
+            // Get price list for Hungary in XML response format using default request options.
             response = messente.getPriceList(Country.HUNGARY, ResponseFormat.XML);
 
             // Checking the response status
             if (response.isSuccess()) {
+
+                System.out.println("#### EXAMPLE 2 ####");
 
                 System.out.println("\nXML response format:\n");
 
@@ -75,13 +84,39 @@ public class GetPricesSimpleExample {
                 //Get account balance part of the response
                 System.out.println("Prices: " + response.getResult());
 
-                //As you can see the outcome of getResponse and getResult methods are the same so you can use either one of them.
+            } else {
+                // In case of failure get failure message                
+                throw new RuntimeException(response.getResponseMessage());
+            }
+            // #### EXAMPLE 3 ####
+            // Create SMS options object
+            MessenteOptions options = new MessenteOptions.Builder()
+                    .httpMethod(HttpMethod.POST) // HTTP method that is used for API call
+                    .protocol(HttpProtocol.HTTPS) // HTTP protocol used for API call
+                    .build();   // Finally build options
+
+            // Get price list for Hungary in XML response format using predefined request options.
+            response = messente.getPriceList(Country.HUNGARY, ResponseFormat.XML, options);
+
+            // Checking the response status
+            if (response.isSuccess()) {
+
+                System.out.println("#### EXAMPLE 3 ####");
+
+                System.out.println("\nXML response format:\n");
+
+                // Get Messente server full response
+                System.out.println("Server response: " + response.getRawResponse());
+
+                //Get account balance part of the response
+                System.out.println("Prices: " + response.getResult());
+
             } else {
                 // In case of failure get failure message                
                 throw new RuntimeException(response.getResponseMessage());
             }
 
-        } catch (Exception e) {
+        } catch (MessenteException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("Failed to get prices! " + e.getMessage());
         }

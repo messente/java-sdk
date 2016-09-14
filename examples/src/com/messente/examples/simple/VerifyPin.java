@@ -22,14 +22,18 @@ import com.messente.sdk.options.MessenteOptions;
 import com.messente.sdk.response.MessenteResponse;
 
 /**
- * Simple example how to get account balance using Messente-SDK.
+ * Simple example how to verify PIN using Messente-SDK.
  *
  * @author Lennar Kallas
  */
-public class GetAccountBalanceSimpleExample {
+public class VerifyPin {
 
     public static final String API_USERNAME = "<api-username-here>";
     public static final String API_PASSWORD = "<api-password-here>";
+    public static final String SMS_RECIPIENT = "+3721234567";
+
+    public static final String VERIFICATION_ID = "<verification-id>";
+    public static final String PIN = "<pin-user-entered-on-your-page>";
 
     public static void main(String[] args) {
 
@@ -41,17 +45,32 @@ public class GetAccountBalanceSimpleExample {
 
         try {
             // #### EXAMPLE 1 ####
-            // Get account balance using default request options
-            response = messente.getBalance();
+            // Verify PIN with default options
+            response = messente.verifyPin(VERIFICATION_ID, PIN);
 
             // Checking the response status
             if (response.isSuccess()) {
 
+                System.out.println("#### EXAMPLE 1 ####");
+
                 // Get Messente server full response
                 System.out.println("Server response: " + response.getRawResponse());
 
-                //Get account balance part of the response
-                System.out.println("Balance: " + response.getResult());
+                // Get result INVALID/EXPIRED/THROTTLED
+                System.out.println("Verification result: " + response.getResult());
+
+                // Handle the result
+                switch (response.getResult()) {
+                    case "VERIFIED":
+                        // Do something...
+                        break;
+                    case "EXPIRED":
+                        // Do something...
+                        break;
+                    case "THROTTLED":
+                        // Do something...
+                        break;
+                }
 
             } else {
                 // In case of failure get failure message                
@@ -59,34 +78,49 @@ public class GetAccountBalanceSimpleExample {
             }
 
             // #### EXAMPLE 2 ####
-            // Check account balance with predefined request options
-            // Options object
+            // Verify PIN with predefined default options
+            // Create options object
             MessenteOptions options = new MessenteOptions.Builder()
                     .httpMethod(HttpMethod.GET)
                     .protocol(HttpProtocol.HTTP)
+                    .ip("<your-ip-address>")
+                    .browser("<your-browser>")
                     .build();
 
-            response = messente.getBalance(options);
+            response = messente.verifyPin(VERIFICATION_ID, PIN, options);
 
             // Checking the response status
             if (response.isSuccess()) {
 
-                // Get Messente server full response
-                System.out.println("Server response(using options): " + response.getRawResponse());
+                System.out.println("#### EXAMPLE 2 ####");
 
-                //Get account balance part of the response
-                System.out.println("Balance: " + response.getResult());
+                // Get Messente server full response
+                System.out.println("Server response: " + response.getRawResponse());
+
+                // Get result INVALID/EXPIRED/THROTTLED
+                System.out.println("Verification result: " + response.getResult());
+
+                // Handle the result
+                switch (response.getResult()) {
+                    case "VERIFIED":
+                        // Do something...
+                        break;
+                    case "EXPIRED":
+                        // Do something...
+                        break;
+                    case "THROTTLED":
+                        // Do something...
+                        break;
+                }
 
             } else {
                 // In case of failure get failure message                
                 throw new RuntimeException(response.getResponseMessage());
             }
-
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("Failed to get account balance! " + e.getMessage());
+            throw new RuntimeException("Failed to send SMS! " + e.getMessage());
         }
 
     }
-
 }

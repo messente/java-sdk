@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Messente Communications Ltd.
+ * Copyright 2016 Messente COmmunications Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,18 @@
 package com.messente.examples.simple;
 
 import com.messente.sdk.Messente;
-import com.messente.sdk.enums.HttpMethod;
-import com.messente.sdk.enums.HttpProtocol;
-import com.messente.sdk.options.MessenteOptions;
 import com.messente.sdk.response.MessenteResponse;
 
 /**
- * Simple example how to get account balance using Messente-SDK.
+ * Simlpe example of how to start verification session using Messente-SDK.
  *
  * @author Lennar Kallas
  */
-public class GetAccountBalanceSimpleExample {
+public class StartVerifySession {
 
     public static final String API_USERNAME = "<api-username-here>";
     public static final String API_PASSWORD = "<api-password-here>";
+    public static final String SMS_RECIPIENT = "+3721234567";
 
     public static void main(String[] args) {
 
@@ -40,9 +38,8 @@ public class GetAccountBalanceSimpleExample {
         MessenteResponse response = null;
 
         try {
-            // #### EXAMPLE 1 ####
-            // Get account balance using default request options
-            response = messente.getBalance();
+            // Start verification session with default options
+            response = messente.startVerificationSession(SMS_RECIPIENT);
 
             // Checking the response status
             if (response.isSuccess()) {
@@ -50,41 +47,16 @@ public class GetAccountBalanceSimpleExample {
                 // Get Messente server full response
                 System.out.println("Server response: " + response.getRawResponse());
 
-                //Get account balance part of the response
-                System.out.println("Balance: " + response.getResult());
+                //Get unique verification ID part of the response(can be used later)
+                System.out.println("Verification ID: " + response.getResult());
 
             } else {
                 // In case of failure get failure message                
                 throw new RuntimeException(response.getResponseMessage());
             }
-
-            // #### EXAMPLE 2 ####
-            // Check account balance with predefined request options
-            // Options object
-            MessenteOptions options = new MessenteOptions.Builder()
-                    .httpMethod(HttpMethod.GET)
-                    .protocol(HttpProtocol.HTTP)
-                    .build();
-
-            response = messente.getBalance(options);
-
-            // Checking the response status
-            if (response.isSuccess()) {
-
-                // Get Messente server full response
-                System.out.println("Server response(using options): " + response.getRawResponse());
-
-                //Get account balance part of the response
-                System.out.println("Balance: " + response.getResult());
-
-            } else {
-                // In case of failure get failure message                
-                throw new RuntimeException(response.getResponseMessage());
-            }
-
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("Failed to get account balance! " + e.getMessage());
+            throw new RuntimeException("Failed to start verification session! " + e.getMessage());
         }
 
     }
