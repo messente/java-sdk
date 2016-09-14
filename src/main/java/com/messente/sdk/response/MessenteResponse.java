@@ -65,6 +65,14 @@ public class MessenteResponse {
 
     public static final String INVALID_TEMPLATE = "PIN code field is missing in the template value";
 
+    public static final String INVALID_PIN = "The PIN code does not match the PIN code sent";
+
+    public static final String PIN_EXPIRED = "	The PIN code has expired. Please request for new PIN code";
+
+    public static final String VERIFICATION_THROTTLED = "Too many verification calls made for this Verification Session. User is possibly trying to guess the password";
+
+    public static final String MISSING_VERIFICATION_ID = "Verification Session with following ID was not found";
+
     public MessenteResponse(String response, int httpCode) {
         this.RESPONSE = response;
         this.HTTP_RESPONSE_CODE = httpCode;
@@ -125,8 +133,9 @@ public class MessenteResponse {
             return null;
         }
 
-        return getContentAfterPrefix(ResponsePrefixes.OK) != null
-                ? getContentAfterPrefix(ResponsePrefixes.OK) : RESPONSE;
+        String contentAfterPrefix = getContentAfterPrefix(ResponsePrefixes.OK);
+        return contentAfterPrefix != null
+                ? contentAfterPrefix : RESPONSE;
     }
 
     /**
@@ -199,6 +208,8 @@ public class MessenteResponse {
                 return MessenteResponse.BLACKLISTED_NR;
             case "ERROR 109":
                 return MessenteResponse.INVALID_TEMPLATE;
+            case "ERROR 110":
+                return MessenteResponse.MISSING_VERIFICATION_ID;
             case "ERROR 111":
                 return MessenteResponse.INVALID_SENDER;
             case "FAILED 102":
