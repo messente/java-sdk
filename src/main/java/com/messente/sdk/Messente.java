@@ -306,7 +306,7 @@ public class Messente {
     }
 
     public MessenteResponse verifyPin(String verificationId, String pin) throws MessenteException {
-        return _verifyPin(verificationId, pin, null, null);
+        return _verifyPin(verificationId, pin, new MessenteOptions(), null);
     }
 
     public URL getPinVerificationURL(String verificationId, String pin) throws MessenteException {
@@ -314,7 +314,7 @@ public class Messente {
     }
 
     public String getPinVerificationUrlAsString(String verificationId, String pin) throws MessenteException {
-        return getPinVerificationURL(verificationId, pin, null, null).toString();
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), null).toString();
     }
 
     public MessenteResponse verifyPin(String verificationId, String pin, MessenteOptions options) throws MessenteException {
@@ -330,18 +330,26 @@ public class Messente {
     }
 
     public MessenteResponse verifyPin(String verificationId, String pin, String cookie) throws MessenteException {
-        return _verifyPin(verificationId, pin, null, cookie);
+        return _verifyPin(verificationId, pin, new MessenteOptions(), cookie);
     }
 
     public URL getPinVerificationURL(String verificationId, String pin, String cookie) throws MessenteException {
-        return getPinVerificationURL(verificationId, pin, null, cookie);
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), cookie);
     }
 
     public String getPinVerificationUrlAsString(String verificationId, String pin, String cookie) throws MessenteException {
-        return getPinVerificationURL(verificationId, pin, null, cookie).toString();
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), cookie).toString();
+    }
+
+    public MessenteResponse verifyPin(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+        return _verifyPin(verificationId, pin, options, cookie);
     }
 
     private MessenteResponse _verifyPin(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+
+        if (options == null) {
+            options = new MessenteOptions();
+        }
 
         URL url = getPinVerificationURL(verificationId, pin, options, cookie);
 
@@ -846,6 +854,10 @@ public class Messente {
     public MessenteDeliveryStatus getDeliveryStatus(String msgid, MessenteOptions options)
             throws MessenteException {
 
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
         URL url = getDlrURL(msgid, options);
 
         MessenteResponse response = sendRequest(url, options.getHttpMethod());
@@ -864,7 +876,7 @@ public class Messente {
      */
     public MessenteResponse getPriceList(Country country) throws MessenteException {
 
-        return getPriceList(country, null, null);
+        return getPriceList(country, null, new MessenteOptions());
     }
 
     /**
@@ -907,9 +919,88 @@ public class Messente {
     public MessenteResponse getPriceList(Country country, ResponseFormat format,
             MessenteOptions options) throws MessenteException {
 
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
         URL url = getPricingURL(format, country, options);
 
         return sendRequest(url, options.getHttpMethod());
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public URL getPricingURL(ResponseFormat format, Country country) throws MessenteException {
+
+        return getPricingURL(format, country, null);
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * pricing API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public String getPricingUrlAsString(ResponseFormat format, Country country) throws MessenteException {
+
+        return getPricingURL(format, country, null).toString();
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @param options Makes API call with specific options.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public URL getPricingURL(ResponseFormat format, Country country,
+            MessenteOptions options) throws MessenteException {
+
+        if (country == null) {
+            throw new MessenteException("Country code not provided(null)!");
+        }
+
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        StringBuilder postData = new StringBuilder();
+
+        appendRequestParameter(postData, "country", country.toString(), "UTF-8");
+
+        if (format != null) {
+            appendRequestParameter(postData, "format", format.toString(), "UTF-8");
+        }
+
+        return buildURL(options.getProtocol(), ApiMethod.PRICES, postData.toString());
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @param options Makes API call with specific options.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * pricing API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public String getPricingUrlAsString(ResponseFormat format, Country country, MessenteOptions options) throws MessenteException {
+
+        return getPricingURL(format, country, options).toString();
     }
 
     /**
@@ -1061,81 +1152,6 @@ public class Messente {
     public String getMessagingUrlAsString(String from, String to, String text, MessenteOptions options) throws MessenteException {
 
         return getMessagingURL(from, to, text, options).toString();
-    }
-
-    /**
-     * Gets the correct URL for HTTP request to Messente's pricing API.
-     *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
-     * @return Correctly formatted URL for HTTP request to Messente's pricing
-     * API.
-     * @throws MessenteException If country code is not provided.
-     */
-    public URL getPricingURL(ResponseFormat format, Country country) throws MessenteException {
-
-        return getPricingURL(format, country, null);
-    }
-
-    /**
-     * Gets the correct URL string for HTTP request to Messente's pricing API.
-     *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
-     * @return Correctly formatted URL string for HTTP request to Messente's
-     * pricing API.
-     * @throws MessenteException If country code is not provided.
-     */
-    public String getPricingUrlAsString(ResponseFormat format, Country country) throws MessenteException {
-
-        return getPricingURL(format, country, null).toString();
-    }
-
-    /**
-     * Gets the correct URL for HTTP request to Messente's pricing API.
-     *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
-     * @param options Makes API call with specific options.
-     * @return Correctly formatted URL for HTTP request to Messente's pricing
-     * API.
-     * @throws MessenteException If country code is not provided.
-     */
-    public URL getPricingURL(ResponseFormat format, Country country,
-            MessenteOptions options) throws MessenteException {
-
-        if (country == null) {
-            throw new MessenteException("Country code not provided(null)!");
-        }
-
-        if (options == null) {
-            options = new MessenteOptions();
-        }
-
-        StringBuilder postData = new StringBuilder();
-
-        appendRequestParameter(postData, "country", country.toString(), "UTF-8");
-
-        if (format != null) {
-            appendRequestParameter(postData, "format", format.toString(), "UTF-8");
-        }
-
-        return buildURL(options.getProtocol(), ApiMethod.PRICES, postData.toString());
-    }
-
-    /**
-     * Gets the correct URL string for HTTP request to Messente's pricing API.
-     *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
-     * @param options Makes API call with specific options.
-     * @return Correctly formatted URL string for HTTP request to Messente's
-     * pricing API.
-     * @throws MessenteException If country code is not provided.
-     */
-    public String getPricingUrlAsString(ResponseFormat format, Country country, MessenteOptions options) throws MessenteException {
-
-        return getPricingURL(format, country, options).toString();
     }
 
     /**
