@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * Helper class for Messente's verification widget. Contains methods for
+ * signature building and comparing.
  *
  * @author Lennar Kallas
  */
@@ -50,7 +52,7 @@ public class VerificationWidgetHelper {
      * @param parameters Map with request parameters.
      * @param pass Messente account API password.
      * @return MD5 hashed string as signature.
-     * @throws com.messente.sdk.exception.MessenteException
+     * @throws MessenteException if some of the required parameter is missing.
      */
     public String generateSignature(Map<String, String> parameters, String pass) throws MessenteException {
 
@@ -81,7 +83,7 @@ public class VerificationWidgetHelper {
      * @param parameters Map with request parameters.
      * @param pass Messente account API password.
      * @return true if signatures are equal, otherwise false.
-     * @throws com.messente.sdk.exception.MessenteException
+     * @throws MessenteException if some of the required parameter is missing.
      */
     public boolean verifySignature(Map<String, String> parameters, String pass) throws MessenteException {
 
