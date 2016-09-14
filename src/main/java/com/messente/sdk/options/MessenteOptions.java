@@ -34,6 +34,7 @@ import java.util.Map;
  */
 public class MessenteOptions {
 
+    // SMS messaging API
     private String timeToSend;
     private String dlrUrl;
     private String charset;
@@ -41,6 +42,14 @@ public class MessenteOptions {
     private String udh;
     private String autoconvert;
 
+    // Verification
+    private String ip;
+    private String browser;
+    private String verifyMaxTries;
+    private String verifyRetryDelay;
+    private String verifyValidity;
+
+    // General
     private HttpMethod httpMethod;
     private HttpProtocol httpProtocol;
 
@@ -57,6 +66,11 @@ public class MessenteOptions {
         this.udh = builder.udh;
         this.httpProtocol = builder.httpProtocol;
         this.httpMethod = builder.httpMethod;
+        this.ip = builder.ip;
+        this.browser = builder.browser;
+        this.verifyMaxTries = builder.verifyMaxTries;
+        this.verifyRetryDelay = builder.verifyRetryDelay;
+        this.verifyValidity = builder.verifyValidity;
     }
 
     /**
@@ -233,11 +247,59 @@ public class MessenteOptions {
         this.udh = udh;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(String browser) {
+        this.browser = browser;
+    }
+
+    public String getVerifyMaxTries() {
+        return verifyMaxTries;
+    }
+
+    public void setVerifyMaxTries(String verifyMaxTries) {
+        this.verifyMaxTries = verifyMaxTries;
+    }
+
+    public String getVerifyRetryDelay() {
+        return verifyRetryDelay;
+    }
+
+    public void setVerifyRetryDelay(String verifyRetryDelay) {
+        this.verifyRetryDelay = verifyRetryDelay;
+    }
+
+    public String getVerifyValidity() {
+        return verifyValidity;
+    }
+
+    public void setVerifyValidity(String verifyValidity) {
+        this.verifyValidity = verifyValidity;
+    }
+
     /**
      * Inner static class for simple building of Messente options.
      */
     public static class Builder {
 
+        // Verification
+        private String ip;
+        private String browser;
+        private String verifyMaxTries;
+        private String verifyRetryDelay;
+        private String verifyValidity;
+
+        // SMS messaging
         private String timeToSend;
         private String dlrUrl;
         private String charset;
@@ -245,10 +307,76 @@ public class MessenteOptions {
         private String autoconvert;
         private String udh;
 
+        // General
         private HttpProtocol httpProtocol;
         private HttpMethod httpMethod;
 
-        // Builder methods to set property
+        // Below: Builder methods to set property.
+        /**
+         * Optional. IP address of the client making verification request.
+         *
+         * @param ip IP address of the verification client.
+         * @return this.
+         */
+        public Builder ip(String ip) {
+            this.ip = ip;
+            return this;
+        }
+
+        /**
+         * Optional verification parameter. User Agent of the browser. For
+         * example "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3)
+         * AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130
+         * Safari/537.36"
+         *
+         * @param browser User agent of the browser.
+         * @return this.
+         */
+        public Builder browser(String browser) {
+            this.browser = browser;
+            return this;
+        }
+
+        /**
+         * Optional. Maximum number of times the PIN code is sent in total.
+         * Defaults to "2" - initial PIN code and one retry. It is discouraged
+         * to set this value to "1" as only the initial PIN code is sent and
+         * retry is disabled.
+         *
+         * @param maxTries Maximum number of times the PIN code is sent in
+         * total.
+         * @return this.
+         */
+        public Builder verifyMaxTries(String maxTries) {
+            this.verifyMaxTries = maxTries;
+            return this;
+        }
+
+        /**
+         * Optional. For how long (in seconds) to wait for next retry, if the
+         * correct PIN code has not been entered yet? Defaults to 30 seconds.
+         *
+         * @param delay For how long (in seconds) to wait for next verification
+         * retry.
+         * @return this.
+         */
+        public Builder verifyRetryDelay(String delay) {
+            this.verifyRetryDelay = delay;
+            return this;
+        }
+
+        /**
+         * Optional. For how long (in seconds) is the PIN code valid. Defaults
+         * to 5 minutes (300 seconds). Maximum 30 minutes (1800 seconds).
+         *
+         * @param validity For how long (in seconds) is the PIN code valid.
+         * @return this.
+         */
+        public Builder verifyValidity(String validity) {
+            this.verifyValidity = validity;
+            return this;
+        }
+
         public Builder timeToSend(String when) {
             this.timeToSend = when;
             return this;
@@ -301,11 +429,63 @@ public class MessenteOptions {
     }
 
     /**
-     * Gets options that are set (not NULL) as map.
+     * Gets options for verification session as map.
      *
-     * @return map with options.
+     * @return map with verification session options.
      */
-    public Map<String, String> getOptions() {
+    public Map<String, String> getPinVerifyOptions() {
+
+        Map<String, String> ops = new HashMap<>();
+
+        if (ip != null && !ip.trim().isEmpty()) {
+            ops.put("ip", ip);
+        }
+
+        if (browser != null && !browser.trim().isEmpty()) {
+            ops.put("browser", browser);
+        }
+
+        return ops;
+    }
+
+    /**
+     * Gets options for verification session as map.
+     *
+     * @return map with verification session options.
+     */
+    public Map<String, String> getVerifySessionStartOptions() {
+
+        Map<String, String> ops = new HashMap<>();
+
+        if (ip != null && !ip.trim().isEmpty()) {
+            ops.put("ip", ip);
+        }
+
+        if (browser != null && !browser.trim().isEmpty()) {
+            ops.put("browser", browser);
+        }
+
+        if (verifyMaxTries != null && !verifyMaxTries.trim().isEmpty()) {
+            ops.put("max_tries", verifyMaxTries);
+        }
+
+        if (verifyRetryDelay != null && !verifyRetryDelay.trim().isEmpty()) {
+            ops.put("retry_delay", verifyRetryDelay);
+        }
+
+        if (verifyValidity != null && !verifyValidity.trim().isEmpty()) {
+            ops.put("validity", verifyValidity);
+        }
+
+        return ops;
+    }
+
+    /**
+     * Gets SMS sending options that are set as map.
+     *
+     * @return map with SMS sending options.
+     */
+    public Map<String, String> getSmsSendingOptions() {
 
         Map<String, String> options = new HashMap<>();
 
@@ -337,16 +517,17 @@ public class MessenteOptions {
     }
 
     /**
-     * Gets options as request parameters.
+     * Gets options for SMS sending as request parameters.
      *
+     * @param ops Map with options.
      * @return StringBuilder with request parameters.
      * @throws MessenteException when encoding parameter value to UTF-8 fails.
      */
-    public StringBuilder getOptionsAsRequestParams() throws MessenteException {
+    public StringBuilder getOptionsAsRequestParams(Map<String, String> ops) throws MessenteException {
 
         StringBuilder params = new StringBuilder();
 
-        for (Map.Entry<String, String> entry : getOptions().entrySet()) {
+        for (Map.Entry<String, String> entry : ops.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
@@ -377,7 +558,12 @@ public class MessenteOptions {
                 + "Validity: " + getValidity() + "\n"
                 + "Autoconvert: " + getAutoconvert() + "\n"
                 + "UDH: " + getUdh() + "\n"
-                + "Protocol: " + getProtocol();
+                + "Protocol: " + getProtocol() + "\n"
+                + "IP: " + getIp() + "\n"
+                + "Browser: " + getBrowser() + "\n"
+                + "Verifixation max tries: " + getVerifyMaxTries() + "\n"
+                + "Verification retry delay: " + getVerifyRetryDelay() + "\n"
+                + "Verification validity: " + getVerifyValidity();
     }
 
 }

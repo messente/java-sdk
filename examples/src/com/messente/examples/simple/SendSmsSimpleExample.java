@@ -16,6 +16,10 @@
 package com.messente.examples.simple;
 
 import com.messente.sdk.Messente;
+import com.messente.sdk.enums.Autoconvert;
+import com.messente.sdk.enums.HttpMethod;
+import com.messente.sdk.enums.HttpProtocol;
+import com.messente.sdk.options.MessenteOptions;
 import com.messente.sdk.response.MessenteResponse;
 
 /**
@@ -41,11 +45,13 @@ public class SendSmsSimpleExample {
         MessenteResponse response = null;
 
         try {
-            // Send SMS
-            response = messente.sendSMS(SMS_SENDER_ID, SMS_RECIPIENT, SMS_TEXT);
+            // #### EXAMPLE 1 ###
+            // Send SMS with default sender ID and default request parameters
+            response = messente.sendSMS(SMS_RECIPIENT, SMS_TEXT);
 
             // Checking the response status
             if (response.isSuccess()) {
+                System.out.println("#### EXAMPLE 1 ####");
 
                 // Get Messente server full response
                 System.out.println("Server response: " + response.getRawResponse());
@@ -57,6 +63,59 @@ public class SendSmsSimpleExample {
                 // In case of failure get failure message                
                 throw new RuntimeException(response.getResponseMessage());
             }
+
+            // #### EXAMPLE 2 ###
+            // Send SMS with given sender ID and default request parameters
+            response = messente.sendSMS(SMS_SENDER_ID, SMS_RECIPIENT, SMS_TEXT);
+
+            // Checking the response status
+            if (response.isSuccess()) {
+
+                System.out.println("#### EXAMPLE 2 ####");
+
+                // Get Messente server full response
+                System.out.println("Server response: " + response.getRawResponse());
+
+                //Get unique message ID part of the response(can be used for retrieving message delivery status later)
+                System.out.println("SMS unique ID: " + response.getResult());
+
+            } else {
+                // In case of failure get failure message                
+                throw new RuntimeException(response.getResponseMessage());
+            }
+
+            // #### EXAMPLE 3 ###
+            // Send SMS with given sender ID and predefined request parameters
+            // Create SMS options object that you can reuse for each SMS you are sending
+            MessenteOptions options = new MessenteOptions.Builder()
+                    .autoconvert(Autoconvert.ON) // Character replacement setting
+                    .charset("UTF-8") // Encoding for SMS text and sender ID
+                    .dlrUrl("http://yourdomain.com/dlr_handling_script.php") // Delivery report URL
+                    .httpMethod(HttpMethod.POST) // HTTP method that is used for API call
+                    .protocol(HttpProtocol.HTTPS) // HTTP protocol used for API call
+                    .udh(null) // UDH (User Data Header)
+                    .validity("60") // For how long message is retried if phone is off
+                    .timeToSend("1453276295") // UNIX timestamp for delayed sending
+                    .build();   // Finally build options                    .
+
+            response = messente.sendSMS(SMS_SENDER_ID, SMS_RECIPIENT, SMS_TEXT, options);
+
+            // Checking the response status
+            if (response.isSuccess()) {
+
+                System.out.println("#### EXAMPLE 3 ####");
+
+                // Get Messente server full response
+                System.out.println("Server response: " + response.getRawResponse());
+
+                //Get unique message ID part of the response(can be used for retrieving message delivery status later)
+                System.out.println("SMS unique ID: " + response.getResult());
+
+            } else {
+                // In case of failure get failure message                
+                throw new RuntimeException(response.getResponseMessage());
+            }
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("Failed to send SMS! " + e.getMessage());

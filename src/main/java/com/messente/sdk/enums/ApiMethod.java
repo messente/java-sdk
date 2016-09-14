@@ -28,7 +28,9 @@ public enum ApiMethod {
     SEND_SMS("/send_sms/"),
     GET_DLR_RESPONSE("/get_dlr_response/"),
     PRICES("/prices/"),
-    GET_BALANCE("/get_balance/");
+    GET_BALANCE("/get_balance/"),
+    VERIFY_START("/verify/start/"),
+    VERIFY_PIN("/verify/pin/");
 
     private final String apiMethod;
 

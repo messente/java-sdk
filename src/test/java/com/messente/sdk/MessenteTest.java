@@ -48,6 +48,10 @@ public class MessenteTest {
     private final String MESSENTE_API_SERVER = "api2.messente.com";
     private final String MESSENTE_API_BACKUP_SERVER = "api3.messente.com";
 
+    private final String DUMMY_TEMPLATE = "Your PIN: <PIN>";
+    private final String DUMMY_BROWSER = "Messente-SDK";
+    private final String DUMMY_IP = "192.168.0.1";
+
     private final Messente MESSENTE;
 
     private final MessenteOptions MESSENTE_OPTIONS = new MessenteOptions.Builder()
@@ -59,6 +63,11 @@ public class MessenteTest {
             .udh(null) // UDH (User Data Header)
             .validity("60") // For how long message is retried if phone is off (minutes)
             .timeToSend("1453276295") // UNIX timestamp for delayed sending
+            .browser(DUMMY_BROWSER)
+            .ip(DUMMY_IP)
+            .verifyMaxTries("3")
+            .verifyRetryDelay("60")
+            .verifyValidity("1800")
             .build();   // Finally build options
 
     public MessenteTest() {
@@ -189,11 +198,9 @@ public class MessenteTest {
 
         try {
 
-            String actualUrl = MESSENTE.getPricingURL(
+            String actualUrl = MESSENTE.getPricingUrlAsString(
                     ResponseFormat.XML,
-                    Country.HUNGARY)
-                    .toString();
-
+                    Country.HUNGARY);
             assertEquals(expectedUrl, actualUrl);
 
         } catch (Exception e) {
@@ -321,4 +328,229 @@ public class MessenteTest {
         }
     }
 
+    /**
+     * Test of getStartVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void testGetStartVerificationUrlAsString_1arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/start/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&to=%2B3725123456";
+
+        try {
+
+            String actualUrl = MESSENTE.getStartVerificationURLAsString(DUMMY_RECIPIENT);
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getStartVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void testGetStartVerificationUrlAsString_2arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/start/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&from=" + DUMMY_SENDER
+                + "&to=%2B3725123456";
+
+        try {
+
+            String actualUrl = MESSENTE.getStartVerificationURLAsString(DUMMY_SENDER, DUMMY_RECIPIENT);
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getStartVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void testGetStartVerificationUrlAsString_3arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/start/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&from=" + DUMMY_SENDER
+                + "&template=Your+PIN%3A+%3CPIN%3E"
+                + "&to=%2B3725123456";
+
+        try {
+
+            String actualUrl = MESSENTE.getStartVerificationURLAsString(DUMMY_SENDER, DUMMY_RECIPIENT, DUMMY_TEMPLATE);
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getStartVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void testGetStartVerificationUrlAsString_4arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/start/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&retry_delay=60"
+                + "&ip=" + DUMMY_IP
+                + "&browser=" + DUMMY_BROWSER
+                + "&max_tries=3"
+                + "&validity=1800"
+                + "&from=" + DUMMY_SENDER
+                + "&template=Your+PIN%3A+%3CPIN%3E"
+                + "&to=%2B3725123456";
+
+        try {
+
+            String actualUrl = MESSENTE.getStartVerificationURLAsString(DUMMY_SENDER, DUMMY_RECIPIENT, DUMMY_TEMPLATE, MESSENTE_OPTIONS);
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getStartVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void testGetStartVerificationUrlAsString_5arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/start/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&retry_delay=60"
+                + "&ip=" + DUMMY_IP
+                + "&browser=" + DUMMY_BROWSER
+                + "&max_tries=3"
+                + "&validity=1800"
+                + "&from=" + DUMMY_SENDER
+                + "&template=Your+PIN%3A+%3CPIN%3E"
+                + "&cookie=cookieName1234"
+                + "&to=%2B3725123456";
+
+        try {
+
+            String actualUrl = MESSENTE.getStartVerificationURLAsString(DUMMY_SENDER, DUMMY_RECIPIENT, DUMMY_TEMPLATE, MESSENTE_OPTIONS, "cookieName1234");
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getPinVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void getPinVerificationUrlAsString_2arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/pin/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&pin=1234"
+                + "&verification_id=" + DUMMY_MSGID;
+
+        try {
+
+            String actualUrl = MESSENTE.getPinVerificationUrlAsString(DUMMY_MSGID, "1234");
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getPinVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void getPinVerificationUrlAsString_3argCookie() {
+
+        String expectedUrl = "https://api2.messente.com/verify/pin/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&cookie=cookieName1234"
+                + "&pin=1234"
+                + "&verification_id=" + DUMMY_MSGID;
+
+        try {
+
+            String actualUrl = MESSENTE.getPinVerificationUrlAsString(DUMMY_MSGID, "1234", "cookieName1234");
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getPinVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void getPinVerificationUrlAsString_3argOps() {
+
+        String expectedUrl = "https://api2.messente.com/verify/pin/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&ip=" + DUMMY_IP
+                + "&browser=" + DUMMY_BROWSER
+                //+ "&cookie=cookieName1234"
+                + "&pin=1234"
+                + "&verification_id=" + DUMMY_MSGID;
+
+        try {
+
+            String actualUrl = MESSENTE.getPinVerificationUrlAsString(DUMMY_MSGID, "1234", MESSENTE_OPTIONS);
+
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test of getPinVerificationUrlAsString method, of class Messente.
+     */
+    @Test
+    public void getPinVerificationUrlAsString_4arg() {
+
+        String expectedUrl = "https://api2.messente.com/verify/pin/?"
+                + "username=" + DUMMY_MESSENTE_USER
+                + "&password=" + DUMMY_MESSENTE_PASSWORD
+                + "&ip=" + DUMMY_IP
+                + "&browser=" + DUMMY_BROWSER
+                + "&cookie=cookieName1234"
+                + "&pin=1234"
+                + "&verification_id=" + DUMMY_MSGID;
+
+        try {
+
+            String actualUrl = MESSENTE.getPinVerificationUrlAsString(DUMMY_MSGID, "1234", MESSENTE_OPTIONS, "cookieName1234");
+            assertEquals(expectedUrl, actualUrl);
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 }

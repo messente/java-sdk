@@ -16,6 +16,10 @@
 package com.messente.examples.simple;
 
 import com.messente.sdk.Messente;
+import com.messente.sdk.enums.HttpMethod;
+import com.messente.sdk.enums.HttpProtocol;
+import com.messente.sdk.exception.MessenteException;
+import com.messente.sdk.options.MessenteOptions;
 import com.messente.sdk.response.MessenteDeliveryStatus;
 
 /**
@@ -28,7 +32,7 @@ public class GetDeliveryStatusSimpleExample {
     public static final String API_USERNAME = "<api-username-here>";
     public static final String API_PASSWORD = "<api-password-here>";
 
-    public static final String MESSAGE_ID = "api2de9c1763cd95f5beab90b705567033fcedad1ead";
+    public static final String MESSAGE_ID = "<message-id-here>";
 
     public static void main(String[] args) {
 
@@ -40,6 +44,8 @@ public class GetDeliveryStatusSimpleExample {
 
         try {
 
+            // #### EXAMPLE 1 ####
+            // Requesting SMS delivery status using default request options
             dlrStatus = messente.getDeliveryStatus(MESSAGE_ID);
 
             // Checking the response status
@@ -72,7 +78,47 @@ public class GetDeliveryStatusSimpleExample {
                 throw new RuntimeException(dlrStatus.getResponseMessage());
             }
 
-        } catch (Exception e) {
+            // #### EXAMPLE 2 ####
+            // Options object
+            MessenteOptions options = new MessenteOptions.Builder()
+                    .httpMethod(HttpMethod.GET)
+                    .protocol(HttpProtocol.HTTP)
+                    .build();
+
+            // Requesting SMS delivery status using predefined options
+            dlrStatus = messente.getDeliveryStatus(MESSAGE_ID, options);
+
+            // Checking the response status
+            if (dlrStatus.isSuccess()) {
+
+                // Get Messente server full response
+                System.out.println("Server response(using options): " + dlrStatus.getRawResponse());
+
+                //Get delivery status part of the response
+                System.out.println("Delivery status(using options): " + dlrStatus.getResult());
+
+                // Checking statuses
+                switch (dlrStatus.getResult()) {
+                    case MessenteDeliveryStatus.SENT:
+                        // Do something ...
+                        break;
+                    case MessenteDeliveryStatus.DELIVERED:
+                        // Do something ...
+                        break;
+                    case MessenteDeliveryStatus.FAILED:
+                        // Do something ...
+                        break;
+                    default:
+                        System.out.println(dlrStatus.getResponseMessage());
+                        break;
+                }
+
+            } else {
+                // In case of failure get failure message                
+                throw new RuntimeException(dlrStatus.getResponseMessage());
+            }
+
+        } catch (MessenteException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("Failed to get delivery report! " + e.getMessage());
         }

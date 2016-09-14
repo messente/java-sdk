@@ -306,6 +306,541 @@ public class Messente {
     }
 
     /**
+     * Verifies PIN code.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public MessenteResponse verifyPin(String verificationId, String pin) throws MessenteException {
+        return verifyPin(verificationId, pin, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public URL getPinVerificationURL(String verificationId, String pin) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, null, null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public String getPinVerificationUrlAsString(String verificationId, String pin) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), null).toString();
+    }
+
+    /**
+     * Verifies PIN code.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public MessenteResponse verifyPin(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return verifyPin(verificationId, pin, options, null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public URL getPinVerificationURL(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public String getPinVerificationUrlAsString(String verificationId, String pin, MessenteOptions options) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, null).toString();
+    }
+
+    /**
+     * Verifies PIN code.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public MessenteResponse verifyPin(String verificationId, String pin, String cookie) throws MessenteException {
+        return verifyPin(verificationId, pin, new MessenteOptions(), cookie);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID, cookie or PIN entered.
+     */
+    public URL getPinVerificationURL(String verificationId, String pin, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), cookie);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID, cookie or PIN entered.
+     */
+    public String getPinVerificationUrlAsString(String verificationId, String pin, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, new MessenteOptions(), cookie).toString();
+    }
+
+    /**
+     * Verifies PIN code.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public MessenteResponse verifyPin(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        URL url = getPinVerificationURL(verificationId, pin, options, cookie);
+
+        return sendRequest(url, options.getHttpMethod());
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public String getPinVerificationUrlAsString(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+        return getPinVerificationURL(verificationId, pin, options, cookie).toString();
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param verificationId Verification ID.
+     * @param pin PIN code user entered.
+     * @param options Customized options to use for API call.
+     * @param cookie Unique cookie assigned to verification session.
+     * @return Correctly formatted URL for PIN verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * ID or PIN entered.
+     */
+    public URL getPinVerificationURL(String verificationId, String pin, MessenteOptions options, String cookie) throws MessenteException {
+        // Check verification ID
+        if (verificationId == null || verificationId.trim().isEmpty()) {
+            throw new MessenteException("Missing Verification ID!");
+        }
+
+        // Check PIN
+        if (pin == null || pin.trim().isEmpty()) {
+            throw new MessenteException("PIN missing!");
+        }
+
+        // Check cookie (can't be empty string)
+        if (cookie != null && cookie.trim().isEmpty()) {
+            throw new MessenteException("Invalid cookie");
+        }
+
+        // Set default options
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        StringBuilder postData = new StringBuilder();
+
+        // Get pre-defined options for verification session
+        Map<String, String> verifyOps = options.getPinVerifyOptions();
+        // Check pre defined options map
+        if (verifyOps != null && !verifyOps.isEmpty()) {
+            appendRequestParameters(postData, verifyOps, true);
+        }
+
+        // Check and add cookie
+        if (cookie != null && !cookie.trim().isEmpty()) {
+            appendRequestParameter(postData, "cookie", cookie, "UTF-8"); // Add cookie
+
+        }
+
+        appendRequestParameter(postData, "pin", pin, "UTF-8"); // Add pin
+        appendRequestParameter(postData, "verification_id", verificationId, "UTF-8"); // Add verification ID
+
+        return buildURL(options.getProtocol(), ApiMethod.VERIFY_PIN, postData.toString());
+    }
+
+    /**
+     * Starts the verification session.
+     *
+     * @param to Recipient's phone number that will receive PIN via SMS.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public MessenteResponse startVerificationSession(String to) throws MessenteException {
+        return startVerificationSession(null, to, null, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public URL getStartVerificationURL(String to) throws MessenteException {
+        return getStartVerificationURL(null, to, null, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public String getStartVerificationURLAsString(String to) throws MessenteException {
+        return getStartVerificationURL(null, to, null, new MessenteOptions(), null).toString();
+    }
+
+    /**
+     * Starts the verification session.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number that will receive PIN via SMS.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public MessenteResponse startVerificationSession(String from, String to) throws MessenteException {
+        return startVerificationSession(from, to, null, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public URL getStartVerificationURL(String from, String to) throws MessenteException {
+        return getStartVerificationURL(from, to, null, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public String getStartVerificationURLAsString(String from, String to) throws MessenteException {
+        return getStartVerificationURL(from, to, null, new MessenteOptions(), null).toString();
+    }
+
+    /**
+     * Starts the verification session.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number that will receive PIN via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public MessenteResponse startVerificationSession(String from, String to, String template) throws MessenteException {
+        return startVerificationSession(from, to, template, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public URL getStartVerificationURL(String from, String to, String template) throws MessenteException {
+        return getStartVerificationURL(from, to, template, new MessenteOptions(), null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public String getStartVerificationURLAsString(String from, String to, String template) throws MessenteException {
+        return getStartVerificationURL(from, to, template, new MessenteOptions(), null).toString();
+    }
+
+    /**
+     * Starts the verification session.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number that will receive PIN via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public MessenteResponse startVerificationSession(String from, String to, String template, MessenteOptions options) throws MessenteException {
+        return startVerificationSession(from, to, template, options, null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public URL getStartVerificationURL(String from, String to, String template, MessenteOptions options) throws MessenteException {
+        return getStartVerificationURL(from, to, template, options, null);
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public String getStartVerificationURLAsString(String from, String to, String template, MessenteOptions options) throws MessenteException {
+        return getStartVerificationURL(from, to, template, options, null).toString();
+    }
+
+    /**
+     * Starts the verification session.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number that will receive PIN via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @param cookie Unique cookie assigned for this session.
+     * @return response from the API server as MessenteResponse object.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public MessenteResponse startVerificationSession(String from, String to, String template, MessenteOptions options, String cookie) throws MessenteException {
+
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+        URL url = getStartVerificationURL(from, to, template, options, cookie);
+
+        return sendRequest(url, options.getHttpMethod());
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @param cookie Unique cookie assigned for this session.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public String getStartVerificationURLAsString(String from, String to, String template, MessenteOptions options, String cookie) throws MessenteException {
+        return getStartVerificationURL(from, to, template, options, cookie).toString();
+    }
+
+    /**
+     * Gets the URL for PIN code verification.
+     *
+     * @param from Sender ID that is used when PIN code is sent via SMS. Note
+     * that this sender ID must be activated by Messente.
+     * @param to Recipient's phone number where to send PIN code via SMS.
+     * @param template Template of the SMS message. Must contain placeholder
+     * %3CPIN%3E for PIN.
+     * @param options Customized options for API call.
+     * @param cookie Unique cookie assigned for this session.
+     * @return Correctly formatted URL for verification API call.
+     * @throws MessenteException when invalid(empty or null string) verification
+     * recipient, cookie entered or template is missing %3CPIN%3E placeholder.
+     */
+    public URL getStartVerificationURL(
+            String from,
+            String to,
+            String template,
+            MessenteOptions options,
+            String cookie) throws MessenteException {
+
+        // Check SMS template for required placeholder
+        if ((template != null && !template.trim().isEmpty()) && !template.contains("<PIN>")) {
+            throw new MessenteException(
+                    "Verification message template "
+                    + "is missing '<PIN>' placeholder!");
+        }
+
+        // Check phone number
+        if (!to.replaceAll("\\D+", "").matches("\\d+")) {
+            throw new MessenteException("Invalid recipient's phone number!");
+        }
+
+        // Check cookie
+        if (cookie != null && cookie.trim().isEmpty()) {
+            throw new MessenteException("Invalid cookie");
+        }
+
+        StringBuilder postData = new StringBuilder();
+
+        // Get pre-defined options for verification session
+        Map<String, String> verifyOps = options.getVerifySessionStartOptions();
+
+        // Check pre defined options map
+        if (verifyOps != null && !verifyOps.isEmpty()) {
+            appendRequestParameters(postData, verifyOps, true);
+        }
+
+        // Set 'from' parameter
+        if (from != null && !from.trim().isEmpty()) {
+            appendRequestParameter(
+                    postData,
+                    "from",
+                    from,
+                    options.getCharset());
+        }
+
+        // Check and add template
+        if (template != null && !template.trim().isEmpty()) {
+            appendRequestParameter(postData, "template", template, "UTF-8");
+        }
+
+        // Check and add cookie
+        if (cookie != null && !cookie.trim().isEmpty()) {
+            appendRequestParameter(postData, "cookie", cookie, "UTF-8"); // Add cookie
+        }
+
+        appendRequestParameter(postData, "to", preparePhoneNumber(to), "UTF-8"); // Add recipient
+
+        return buildURL(options.getProtocol(), ApiMethod.VERIFY_START, postData.toString());
+    }
+
+    /**
+     * Builds URL with given parameters.
+     *
+     * @param protocol Protocol used in URL. HTTP/HTTPS.
+     * @param apiMethod Messente's API that is used for URL building.
+     * @param params Correctly formatted request parameters.
+     * @return Correctly formatted URL.
+     * @throws MessenteException On URL building failure. Malformed request
+     * parameters for example.
+     */
+    private URL buildURL(HttpProtocol protocol, ApiMethod apiMethod, String params) throws MessenteException {
+
+        URL url = null;
+
+        try {
+            // Build URL and add request params if there are any
+            String urlStr
+                    = new URL(protocol.toString(), getServer(), apiMethod.toString())
+                    .toString()
+                    + "?" + prepareCredentialsAsRequestParams(getUsername(), getPassword())
+                    + (params != null ? "&" + params : "");
+
+            url = new URL(urlStr);
+
+        } catch (MalformedURLException ex) {
+            throw new MessenteException("Building URL failed "
+                    + ex.getMessage() != null ? ex.getMessage() : "");
+        }
+        return url;
+    }
+
+    /**
      * Sends SMS with the specified sender ID to specified recipient with
      * selected options.
      *
@@ -319,7 +854,13 @@ public class Messente {
     public MessenteResponse sendSMS(String from, String to, String text,
             MessenteOptions options) throws MessenteException {
 
-        return _sendSMS(from, to, text, options);
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        URL url = getMessagingURL(from, to, text, options);
+
+        return sendRequest(url, options.getHttpMethod());
     }
 
     /**
@@ -335,7 +876,7 @@ public class Messente {
     public MessenteResponse sendSMS(
             String from, String to, String text) throws MessenteException {
 
-        return _sendSMS(from, to, text, new MessenteOptions());
+        return sendSMS(from, to, text, new MessenteOptions());
     }
 
     /**
@@ -348,7 +889,7 @@ public class Messente {
      * @throws MessenteException if sending SMS failed.
      */
     public MessenteResponse sendSMS(String to, String text) throws MessenteException {
-        return _sendSMS(null, to, text, new MessenteOptions());
+        return sendSMS(null, to, text, new MessenteOptions());
     }
 
     /**
@@ -391,48 +932,19 @@ public class Messente {
         }
     }
 
-    private MessenteResponse _sendSMS(
-            String from,
-            String recipient,
-            String text,
-            MessenteOptions options) throws MessenteException {
-
-        StringBuilder postData = new StringBuilder();
-
-        appendRequestParameters(postData, options.getOptions(), true);
-        if (from != null && !from.trim().isEmpty()) {
-            appendRequestParameter(
-                    postData,
-                    "from",
-                    from,
-                    options.getCharset());
-        }
-
-        appendRequestParameter(postData, "text", text, options.getCharset()); // Add SMS 
-        appendRequestParameter(postData, "to", preparePhoneNumber(recipient), "UTF-8"); // Add recipient
-
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.SEND_SMS, postData.toString());
-    }
-
     /**
      * Dispatch method for making HTTP requests. Retry call to backup server if
      * main server failed.
      *
-     * @param protocol HTTP protocol being used.
-     * @param httpMethod HTTP GET or POST.
-     * @param apiMethod Messente API method.
-     * @param postData Data to post.
+     * @param url URL of the request.
+     * @param httpMethod HTTP POST/GET method used for request.
      * @return response from the API server as MessenteResponse object.
      * @throws MessenteException if HTTP request fails.
      */
-    private MessenteResponse sendRequest(HttpProtocol protocol, String httpMethod,
-            ApiMethod apiMethod, String postData) throws MessenteException {
+    private MessenteResponse sendRequest(URL url, String httpMethod) throws MessenteException {
 
         boolean retry = false;
         MessenteResponse response = null;
-
-        URL url = getURL(protocol, getServer(), apiMethod, postData);
 
         response = makeHttpRequest(url, httpMethod);
 
@@ -442,14 +954,19 @@ public class Messente {
 
         // Retry with backup server
         if (retry && getBackupServer() != null) {
-            url = getURL(protocol, getBackupServer(), apiMethod, postData);
-            response = makeHttpRequest(url, httpMethod);
-        }
 
+            try {
+                url = new URL(url.toString().replaceFirst(server, backupServer));
+                response = makeHttpRequest(url, httpMethod);
+            } catch (MalformedURLException ex) {
+                return response;
+            }
+        }
         return response;
     }
 
     /**
+     * Takes care of making HTTP request to given URL.
      *
      * @param url target URL.
      * @param httpMethod HTTP POST or GET.
@@ -614,23 +1131,13 @@ public class Messente {
     public MessenteDeliveryStatus getDeliveryStatus(String msgid, MessenteOptions options)
             throws MessenteException {
 
-        if (msgid == null || msgid.trim().isEmpty()) {
-            throw new MessenteException("Cannot check message delivery status "
-                    + "- message ID not set!");
-        }
-
-        StringBuilder postData = new StringBuilder();
-        appendRequestParameter(postData, "sms_unique_id", msgid, "UTF-8");
-
-        // Set default options if none are set
         if (options == null) {
             options = new MessenteOptions();
         }
 
-        MessenteResponse response = sendRequest(
-                options.getProtocol(),
-                options.getHttpMethod(),
-                ApiMethod.GET_DLR_RESPONSE, postData.toString());
+        URL url = getDlrURL(msgid, options);
+
+        MessenteResponse response = sendRequest(url, options.getHttpMethod());
 
         return new MessenteDeliveryStatus(
                 response.getRawResponse(),
@@ -645,8 +1152,7 @@ public class Messente {
      * @throws MessenteException if country is not specified.
      */
     public MessenteResponse getPriceList(Country country) throws MessenteException {
-
-        return getPriceList(country, null, null);
+        return getPriceList(country, null, new MessenteOptions());
     }
 
     /**
@@ -689,24 +1195,85 @@ public class Messente {
     public MessenteResponse getPriceList(Country country, ResponseFormat format,
             MessenteOptions options) throws MessenteException {
 
+        if (options == null) {
+            options = new MessenteOptions();
+        }
+
+        URL url = getPricingURL(format, country, options);
+
+        return sendRequest(url, options.getHttpMethod());
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public URL getPricingURL(ResponseFormat format, Country country) throws MessenteException {
+        return getPricingURL(format, country, null);
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * pricing API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public String getPricingUrlAsString(ResponseFormat format, Country country) throws MessenteException {
+        return getPricingURL(format, country, null).toString();
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @param options Makes API call with specific options.
+     * @return Correctly formatted URL for HTTP request to Messente's pricing
+     * API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public URL getPricingURL(ResponseFormat format, Country country,
+            MessenteOptions options) throws MessenteException {
+
         if (country == null) {
             throw new MessenteException("Country code not provided(null)!");
+        }
+
+        if (options == null) {
+            options = new MessenteOptions();
         }
 
         StringBuilder postData = new StringBuilder();
 
         appendRequestParameter(postData, "country", country.toString(), "UTF-8");
+
         if (format != null) {
             appendRequestParameter(postData, "format", format.toString(), "UTF-8");
         }
 
-        // Set default options if none are set
-        if (options == null) {
-            options = new MessenteOptions();
-        }
+        return buildURL(options.getProtocol(), ApiMethod.PRICES, postData.toString());
+    }
 
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.PRICES, postData.toString());
+    /**
+     * Gets the correct URL string for HTTP request to Messente's pricing API.
+     *
+     * @param format The response format. Available formats are XML and JSON.
+     * @param country The country code which pricelist you wish to get.
+     * @param options Makes API call with specific options.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * pricing API.
+     * @throws MessenteException If country code is not provided.
+     */
+    public String getPricingUrlAsString(ResponseFormat format, Country country, MessenteOptions options) throws MessenteException {
+        return getPricingURL(format, country, options).toString();
     }
 
     /**
@@ -734,14 +1301,12 @@ public class Messente {
      */
     public MessenteResponse getBalance(MessenteOptions options) throws MessenteException {
 
-        String credentials = prepareCredentialsAsRequestParams(getUsername(), getPassword());
-
         if (options == null) {
             options = new MessenteOptions();
         }
 
-        return sendRequest(options.getProtocol(), options.getHttpMethod(),
-                ApiMethod.GET_BALANCE, credentials);
+        URL url = getCreditsURL(options);
+        return sendRequest(url, options.getHttpMethod());
     }
 
     /**
@@ -756,8 +1321,22 @@ public class Messente {
      * @throws MessenteException If recipient or SMS text is not specified.
      */
     public URL getMessagingURL(String from, String to, String text) throws MessenteException {
-
         return getMessagingURL(from, to, text, null);
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's messaging API.
+     *
+     * @param from Sender ID. Must be registered and validated under your
+     * messente.com account.
+     * @param to Recipient's phone number.
+     * @param text SMS text.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * messaging API.
+     * @throws MessenteException If recipient or SMS text is not specified.
+     */
+    public String getMessagingUrlAsString(String from, String to, String text) throws MessenteException {
+        return getMessagingURL(from, to, text, null).toString();
     }
 
     /**
@@ -771,8 +1350,21 @@ public class Messente {
      * @throws MessenteException If recipient or SMS text is not specified.
      */
     public URL getMessagingURL(String to, String text) throws MessenteException {
-
         return getMessagingURL(null, to, text, null);
+    }
+
+    /**
+     * Gets the correct URL for HTTP request to Messente's messaging API. Note
+     * that this method will use your default sender ID.
+     *
+     * @param to Recipient's phone number.
+     * @param text SMS text.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * messaging API.
+     * @throws MessenteException If recipient or SMS text is not specified.
+     */
+    public String getMessagingUrlAsString(String to, String text) throws MessenteException {
+        return getMessagingURL(null, to, text, null).toString();
     }
 
     /**
@@ -810,60 +1402,25 @@ public class Messente {
         appendRequestParameter(postData, "to", preparePhoneNumber(to), "UTF-8");
         appendRequestParameter(postData, "text", text, options.getCharset());
 
-        appendRequestParameters(postData, options.getOptions(), true);
+        appendRequestParameters(postData, options.getSmsSendingOptions(), true);
 
-        return getURL(
-                options.getProtocol(),
-                getServer(),
-                ApiMethod.SEND_SMS,
-                postData.toString());
-
+        return buildURL(options.getProtocol(), ApiMethod.SEND_SMS, postData.toString());
     }
 
     /**
-     * Gets the correct URL for HTTP request to Messente's pricing API.
+     * Gets the correct URL for HTTP request to Messente's messaging API.
      *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
-     * @return Correctly formatted URL for HTTP request to Messente's pricing
-     * API.
-     * @throws MessenteException If country code is not provided.
-     */
-    public URL getPricingURL(ResponseFormat format, Country country) throws MessenteException {
-
-        return getPricingURL(format, country, null);
-    }
-
-    /**
-     * Gets the correct URL for HTTP request to Messente's pricing API.
-     *
-     * @param format The response format. Available formats are XML and JSON.
-     * @param country The country code which pricelist you wish to get.
+     * @param from Sender ID. Must be registered and validated under your
+     * messente.com account.
+     * @param to Recipient's phone number.
+     * @param text SMS text.
      * @param options Makes API call with specific options.
-     * @return Correctly formatted URL for HTTP request to Messente's pricing
-     * API.
-     * @throws MessenteException If country code is not provided.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * messaging API.
+     * @throws MessenteException If recipient or SMS text is not specified.
      */
-    public URL getPricingURL(ResponseFormat format, Country country,
-            MessenteOptions options) throws MessenteException {
-
-        if (country == null) {
-            throw new MessenteException("Country code not provided(null)!");
-        }
-
-        if (options == null) {
-            options = new MessenteOptions();
-        }
-
-        StringBuilder postData = new StringBuilder();
-
-        appendRequestParameter(postData, "country", country.toString(), "UTF-8");
-
-        if (format != null) {
-            appendRequestParameter(postData, "format", format.toString(), "UTF-8");
-        }
-
-        return getURL(options.getProtocol(), getServer(), ApiMethod.PRICES, postData.toString());
+    public String getMessagingUrlAsString(String from, String to, String text, MessenteOptions options) throws MessenteException {
+        return getMessagingURL(from, to, text, options).toString();
     }
 
     /**
@@ -878,8 +1435,22 @@ public class Messente {
      * @throws MessenteException Message ID not specified.
      */
     public URL getDlrURL(String msgid) throws MessenteException {
-
         return getDlrURL(msgid, null);
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's synchronous
+     * delivery report API.
+     *
+     * @see
+     * <a href="http://messente.com/documentation/delivery-report">http://messente.com/documentation/delivery-report</a>
+     * @param msgid unique message ID which delivery report you wish to have.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * delivery report API.
+     * @throws MessenteException Message ID not specified.
+     */
+    public String getDlrUrlAsString(String msgid) throws MessenteException {
+        return getDlrURL(msgid, null).toString();
     }
 
     /**
@@ -897,7 +1468,7 @@ public class Messente {
     public URL getDlrURL(String msgid, MessenteOptions options) throws MessenteException {
 
         if (msgid == null || msgid.trim().isEmpty()) {
-            throw new MessenteException("Message ID not specified for DLR!");
+            throw new MessenteException("Message ID not specified!");
         }
 
         if (options == null) {
@@ -905,7 +1476,23 @@ public class Messente {
         }
 
         String postData = "sms_unique_id=" + msgid;
-        return getURL(options.getProtocol(), getServer(), ApiMethod.GET_DLR_RESPONSE, postData);
+        return buildURL(options.getProtocol(), ApiMethod.GET_DLR_RESPONSE, postData);
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's synchronous
+     * delivery report API.
+     *
+     * @param options Makes API call with specific options.
+     * @see
+     * <a href="http://messente.com/documentation/delivery-report">http://messente.com/documentation/delivery-report</a>
+     * @param msgid unique message ID which delivery report you wish to have.
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * delivery report API.
+     * @throws MessenteException Message ID not specified.
+     */
+    public String getDlrUrlAsString(String msgid, MessenteOptions options) throws MessenteException {
+        return getDlrURL(msgid, options).toString();
     }
 
     /**
@@ -919,6 +1506,19 @@ public class Messente {
      */
     public URL getCreditsURL() throws MessenteException {
         return getCreditsURL(null);
+    }
+
+    /**
+     * Gets the correct URL string for HTTP request to Messente's credits API.
+     *
+     * @see
+     * <a href="http://messente.com/documentation/credits-api">http://messente.com/documentation/credits-api</a>
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * credits API.
+     * @throws MessenteException If building URL fails.
+     */
+    public String getCreditsUrlAsString() throws MessenteException {
+        return getCreditsURL(null).toString();
     }
 
     /**
@@ -937,29 +1537,21 @@ public class Messente {
             options = new MessenteOptions();
         }
 
-        return getURL(options.getProtocol(), getServer(), ApiMethod.GET_BALANCE, null);
+        return buildURL(options.getProtocol(), ApiMethod.GET_BALANCE, null);
     }
 
-    private URL getURL(HttpProtocol protocol, String serverUrl,
-            ApiMethod apimethod, String postData) throws MessenteException {
-
-        URL url = null;
-
-        try {
-            // Build URL and add request params if there are any
-            String urlStr
-                    = new URL(protocol.toString(), serverUrl, apimethod.toString())
-                    .toString()
-                    + "?" + prepareCredentialsAsRequestParams(getUsername(), getPassword())
-                    + (postData != null ? "&" + postData : "");
-
-            url = new URL(urlStr);
-
-        } catch (MalformedURLException ex) {
-            throw new MessenteException("Building URL failed "
-                    + ex.getMessage() != null ? ex.getMessage() : "");
-        }
-        return url;
+    /**
+     * Gets the correct URL string for HTTP request to Messente's credits API.
+     *
+     * @param options Makes API call with specific options.
+     * @see
+     * <a href="http://messente.com/documentation/credits-api">http://messente.com/documentation/credits-api</a>
+     * @return Correctly formatted URL string for HTTP request to Messente's
+     * credits API.
+     * @throws MessenteException If building URL fails.
+     */
+    public String getCreditsUrlAsString(MessenteOptions options) throws MessenteException {
+        return getCreditsURL(options).toString();
     }
 
     /**
