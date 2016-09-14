@@ -23,7 +23,7 @@ Just add messente-sdk dependency to your POM.xml file:
 <dependency>
     <groupId>com.messente</groupId>
     <artifactId>messente-sdk</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
