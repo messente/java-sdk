@@ -198,11 +198,9 @@ public class MessenteTest {
 
         try {
 
-            String actualUrl = MESSENTE.getPricingURL(
+            String actualUrl = MESSENTE.getPricingUrlAsString(
                     ResponseFormat.XML,
-                    Country.HUNGARY)
-                    .toString();
-
+                    Country.HUNGARY);
             assertEquals(expectedUrl, actualUrl);
 
         } catch (Exception e) {
