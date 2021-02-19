@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.messente</groupId>
     <artifactId>messente-sdk</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
-    
+
     <name>messente-sdk</name>
-    <description>This SDK contains methods for using SMS Messaging API, Delivery report API, Pricing API and Credits API.</description>
+    <description>This SDK contains methods for using SMS Messaging API, Delivery report API, Pricing API and Credits
+        API.
+    </description>
     <url>https://github.com/messente/messente-sdk</url>
-    
+
     <organization>
-        <name>Messente Communications Ltd.</name>
-        <url>http://messente.com</url>
+        <name>Messente Communications</name>
+        <url>https://messente.com</url>
     </organization>
-    
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -22,13 +25,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <scm>
         <connection>scm:git:git://github.com/messente/messente-sdk.git</connection>
         <developerConnection>scm:git:git@github.com:messente/messente-sdk.git</developerConnection>
         <url>https://github.com/messente/messente-sdk/tree/master</url>
-    </scm> 
-    
+    </scm>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -39,27 +42,22 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    
+
     <developers>
         <developer>
-            <id>lkallas</id>
-            <name>Lennar Kallas</name>
-            <email>lennar.kallas@messente.com</email>
-            <organization>Messente Communications Ltd.</organization>
-            <organizationUrl>http://messente.com</organizationUrl>
-            <roles>
-                <role>Software engineer</role>
-            </roles>
-            <timezone>Europe/Tallinn</timezone>
+            <name>Messente</name>
+            <email>development@messente.com</email>
+            <organization>Messente Communications</organization>
+            <organizationUrl>https://messente.com</organizationUrl>
         </developer>
     </developers>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -74,66 +72,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.0.2</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>test-jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
