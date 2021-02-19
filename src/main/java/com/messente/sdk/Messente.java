@@ -908,8 +908,8 @@ public class Messente {
      * Creates a string with API user credentials that is usable in HTTP
      * request.
      *
-     * @param username Messente API username.
-     * @param password Messente API password.
+     * @param user Messente API username.
+     * @param pass Messente API password.
      * @return Credentials as HTTP request parameters.
      */
     private String prepareCredentialsAsRequestParams(
